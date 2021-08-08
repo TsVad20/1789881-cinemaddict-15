@@ -1,13 +1,11 @@
-export const createPopupTemplate = (popup, filmCard) => {
+export const createPopupTemplate = (filmCard) => {
   const {
-    popupDirector,
-    popupWriters,
-    popupActors,
-    popupReleaseDate,
-    popupCountry,
-    popupAge,
-  } = popup;
-  const {
+    filmDirector,
+    filmWriters,
+    filmActors,
+    filmReleaseDate,
+    filmCountry,
+    filmAge,
     filmComments,
     filmPoster,
     filmTitle,
@@ -23,8 +21,8 @@ export const createPopupTemplate = (popup, filmCard) => {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="${filmPoster}" alt="${filmPoster}">
-        <p class="film-details__age">${popupAge}</p>
+        <img class="film-details__poster-img" src="./images/posters/${filmPoster}" alt="./images/posters/${filmPoster}">
+        <p class="film-details__age">${filmAge}</p>
       </div>
       <div class="film-details__info">
         <div class="film-details__info-head">
@@ -40,19 +38,19 @@ export const createPopupTemplate = (popup, filmCard) => {
         <table class="film-details__table">
           <tr class="film-details__row">
             <td class="film-details__term">Director</td>
-            <td class="film-details__cell">${popupDirector}</td>
+            <td class="film-details__cell">${filmDirector}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Writers</td>
-            <td class="film-details__cell">${popupWriters}</td>
+            <td class="film-details__cell">${filmWriters}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Actors</td>
-            <td class="film-details__cell">${popupActors}</td>
+            <td class="film-details__cell">${filmActors}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${popupReleaseDate}</td>
+            <td class="film-details__cell">${filmReleaseDate.filmDay} ${filmReleaseDate.filmMonth} ${filmReleaseDate.filmYear}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
@@ -60,7 +58,7 @@ export const createPopupTemplate = (popup, filmCard) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
-            <td class="film-details__cell">${popupCountry}</td>
+            <td class="film-details__cell">${filmCountry}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Genres</td>
@@ -108,33 +106,4 @@ export const createPopupTemplate = (popup, filmCard) => {
   </div>
 </form>
 </section>`;
-};
-
-export const createPopupGenresTemplate = (filmCard) => {
-  const {
-    popupGenres,
-  } = filmCard;
-  return popupGenres.map((item) => `<span class="film-details__genre">${item}</span>`);
-};
-
-export const createPopupCommentTemplate = (filmComment) => {
-  const {
-    commentEmoji,
-    commentText,
-    commentAuthor,
-    commentDate,
-  } = filmComment;
-  return `<li class="film-details__comment">
-          <span class="film-details__comment-emoji">
-            <img src="${commentEmoji}" width="55" height="55" alt="${commentEmoji}">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${commentText}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${commentAuthor}</span>
-              <span class="film-details__comment-day">${commentDate}</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>
-        </li>`;
 };

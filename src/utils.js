@@ -11,3 +11,16 @@ export const getRandomFloat = (a = 1, b = 0) => {
   const upper = Math.max(a, b);
   return (lower + Math.random() * (upper - lower)).toFixed(1);
 };
+// Функция генерации случайного индекса из массива
+export const generateRandomIndexFromArray = (array) => {
+  const randomIndex = getRandomInteger(0, array.length - 1);
+  return array[randomIndex];
+};
+// Функция генерации массива случайной длины
+export const generateArrayOfRandomLength = (array) => {
+  const randomItem = getRandomInteger(0, array.length - 1);
+  return array.slice(0, randomItem + 1);
+};
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
