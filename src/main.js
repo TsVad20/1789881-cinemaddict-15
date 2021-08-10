@@ -1,45 +1,22 @@
-import {
-  EXTRA_FILM_LIST_CARD_COUNT,
-  FILM_CARD_COUNT,
-  MAIN_FILM_LIST_CARD_COUNT,
-  SHOW_MORE_BUTTON_STEP
-} from './consts.js';
-import {
-  generateFilmCard
-} from './mock/film-card.js';
-import {
-  createFilmCardTemplate
-} from './view/film-card.js';
-import {
-  filmsListTemplate
-} from './view/films-list.js';
-import {
-  filterTemplate
-} from './view/filters.js';
-import {
-  createMainMenuTemplate
-} from './view/main-menu.js';
-import {
-  createPopupTemplate
-} from './view/popup.js';
-import {
-  createPopupGenresTemplate
-} from './view/popup-genres.js';
-import {
-  createPopupCommentTemplate
-} from './view/popup-comment.js';
-import {
-  profileRating
-} from './view/profile-rating.js';
-import {
-  showMoreButtonTemplate
-} from './view/show-more-button.js';
-import {
-  statisticsTemplate
-} from './view/statistics.js';
-import {
-  renderTemplate
-} from './utils.js';
+import {EXTRA_FILM_LIST_CARD_COUNT, FILM_CARD_COUNT, MAIN_FILM_LIST_CARD_COUNT, SHOW_MORE_BUTTON_STEP} from './consts.js';
+import {generateFilmCard} from './mock/film-card.js';
+import {createFilmCardTemplate} from './view/film-card.js';
+import FilmsListView from './view/films-list.js';
+import SortView from './view/sort.js';
+import SiteMenuView from './view/main-menu.js';
+import PopupView, { createPopupTemplate } from './view/popup.js';
+import {createPopupGenresTemplate} from './view/popup-genres.js';
+import {createPopupCommentTemplate} from './view/popup-comment.js';
+import HeaderProfileView from './view/profile-rating.js';
+import ShowMoreButtonView from './view/show-more-button.js';
+import {statisticsTemplate} from './view/statistics.js';
+import {renderElement, renderPosition, renderTemplate} from './utils.js';
+
+const siteMenuComponent = new SiteMenuView();
+const sortComponent = new SortView();
+const headerProfileComponent = new HeaderProfileView();
+const filmsListComponent = new FilmsListView();
+const showMoreButtonComponent = new ShowMoreButtonView();
 
 let filmCards = new Array(FILM_CARD_COUNT).fill().map(generateFilmCard);
 
@@ -50,11 +27,15 @@ const siteFooterStatisticsElement = document.querySelector('.footer__statistics'
 
 renderTemplate(siteFooterStatisticsElement, statisticsTemplate, 'beforeend');
 
-renderTemplate(siteMainElement, createMainMenuTemplate(filmCards), 'beforeend');
-renderTemplate(siteMainElement, filterTemplate, 'beforeend');
-renderTemplate(siteHeaderElement, profileRating, 'beforeend');
-renderTemplate(siteMainElement, filmsListTemplate, 'beforeend');
+renderElement(siteMainElement, siteMenuComponent.getElement(), renderPosition.beforeEnd);
 
+renderElement(siteMainElement, sortComponent.getElement(), renderPosition.beforeEnd);
+
+renderElement(siteHeaderElement, headerProfileComponent.getElement(), renderPosition.beforeEnd);
+
+renderElement(siteMainElement, filmsListComponent.getElement(), renderPosition.beforeEnd);
+
+const filmsList = document.querySelector('.films-list');
 const filmsListContainer = document.querySelector('.films-list__container');
 
 const openPopup = (film) => {
@@ -66,7 +47,9 @@ const openPopup = (film) => {
     }
     if (evt.target.classList.contains('film-card__title') || evt.target.classList.contains('film-card__poster')) {
       document.body.classList.add('modal-open');
-      renderTemplate(siteFooterElement, createPopupTemplate(film), 'afterend');
+      //renderTemplate(siteFooterElement, createPopupTemplate(film), renderPosition.afterEnd);
+
+      renderElement(siteFooterElement, new PopupView(film).getElement(), renderPosition.afterEnd);
 
       const filmDetailsCell = document.querySelectorAll('.film-details__cell');
       createPopupGenresTemplate(film).forEach((item) => {
@@ -92,7 +75,7 @@ for (let cardIndex = 0; cardIndex < MAIN_FILM_LIST_CARD_COUNT; cardIndex++) {
   renderTemplate(filmsListContainer, createFilmCardTemplate(filmCards[cardIndex]), 'beforeend');
   openPopup(filmCards[cardIndex]);
 }
-renderTemplate(filmsListContainer, showMoreButtonTemplate, 'afterend');
+renderElement(filmsList, showMoreButtonComponent.getElement(), renderPosition.beforeEnd);
 
 const showMoreButton = document.querySelector('.films-list__show-more');
 

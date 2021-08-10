@@ -1,4 +1,5 @@
-export const createPopupTemplate = (filmCard) => {
+import {createElement} from '../utils.js';
+export const createPopupTemplate = (film) => {
   const {
     filmDirector,
     filmWriters,
@@ -11,7 +12,7 @@ export const createPopupTemplate = (filmCard) => {
     filmTitle,
     filmRating,
     filmDuration,filmDescription,
-  } = filmCard;
+  } = film;
 
   return `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -107,3 +108,26 @@ export const createPopupTemplate = (filmCard) => {
 </form>
 </section>`;
 };
+
+export default class PopupView {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
