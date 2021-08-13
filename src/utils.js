@@ -12,11 +12,10 @@ export const renderElement = (container, element, place) => {
     case renderPosition.beforeEnd:
       container.append(element);
       break;
+    case renderPosition.afterEnd:
+      container.after(element);
+      break;
   }
-};
-
-export const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
 };
 
 export const createElement = (template) => {

@@ -1,7 +1,8 @@
+import {createElement} from '../utils.js';
 import { FILM_DESCRIPTION_MAX_LENGTH } from '../consts.js';
 
-export const createFilmCardTemplate = (filmCard) =>{
-  const {filmPoster, filmTitle, filmDescription, filmRating, filmReleaseDate, filmDuration, filmGenres, filmComments} = filmCard;
+const createFilmCardTemplate = (film) =>{
+  const {filmPoster, filmTitle, filmDescription, filmRating, filmReleaseDate, filmDuration, filmGenres, filmComments} = film;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${filmTitle}</h3>
@@ -21,3 +22,25 @@ export const createFilmCardTemplate = (filmCard) =>{
     </div>
     </article>`;
 };
+export default class FilmCardView {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
