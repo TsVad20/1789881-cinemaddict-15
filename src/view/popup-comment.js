@@ -1,4 +1,5 @@
-export const createPopupCommentTemplate = (filmComment) => {
+import {createElement} from '../utils.js';
+const createPopupCommentTemplate = (filmComment) => {
   const {
     commentEmoji,
     commentText,
@@ -19,3 +20,26 @@ export const createPopupCommentTemplate = (filmComment) => {
           </div>
         </li>`;
 };
+
+export default class PopupCommentView {
+  constructor(filmComment) {
+    this._film = filmComment;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPopupCommentTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
