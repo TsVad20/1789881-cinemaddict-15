@@ -1,5 +1,6 @@
 import {createElement} from '../utils.js';
 export const createPopupTemplate = (film) => {
+
   const {
     filmDirector,
     filmWriters,
@@ -11,8 +12,26 @@ export const createPopupTemplate = (film) => {
     filmPoster,
     filmTitle,
     filmRating,
-    filmDuration,filmDescription,
+    filmDuration,
+    filmDescription,
+    filmGenres,
   } = film;
+
+  const genres = filmGenres.map((item) => `<span class="film-details__genre">${item}</span>`);
+
+  const comments = filmComments.map((item)=>`<li class="film-details__comment">
+  <span class="film-details__comment-emoji">
+    <img src="${item.commentEmoji}" width="55" height="55" alt="${item.commentEmoji}">
+  </span>
+  <div>
+    <p class="film-details__comment-text">${item.commentText}</p>
+    <p class="film-details__comment-info">
+      <span class="film-details__comment-author">${item.commentAuthor}</span>
+      <span class="film-details__comment-day">${item.commentDate}</span>
+      <button class="film-details__comment-delete">Delete</button>
+    </p>
+  </div>
+</li>`);
 
   return `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -62,8 +81,8 @@ export const createPopupTemplate = (film) => {
             <td class="film-details__cell">${filmCountry}</td>
           </tr>
           <tr class="film-details__row">
-            <td class="film-details__term">Genres</td>
-            <td class="film-details__cell"></td>
+            <td class="film-details__term">${filmGenres.length > 1 ? 'Genres' : 'Genre'}</td>
+            <td class="film-details__cell">${genres.join('')}</td>
           </tr>
         </table>
         <p class="film-details__film-description">${filmDescription}</p>
@@ -78,7 +97,7 @@ export const createPopupTemplate = (film) => {
   <div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmComments.length}</span></h3>
-      <ul class="film-details__comments-list"></ul>
+      <ul class="film-details__comments-list">${comments.join('')}</ul>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label"></div>
         <label class="film-details__comment-label">

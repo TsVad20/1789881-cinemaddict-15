@@ -4,7 +4,7 @@ export const renderPosition = {
   afterEnd: 'afterend',
 };
 
-export const renderElement = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case renderPosition.afterBegin:
       container.prepend(element);
