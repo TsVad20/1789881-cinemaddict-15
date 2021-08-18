@@ -8,7 +8,7 @@ import PopupView from './view/popup.js';
 import HeaderProfileView from './view/profile-rating.js';
 import ShowMoreButtonView from './view/show-more-button.js';
 import FilmStatisticsView from './view/statistics.js';
-import {render, renderPosition} from './utils.js';
+import {render, renderPosition} from './render.js';
 import {generateFilter} from './mock/filters.js';
 import NoFilmView from './view/no-film.js';
 
@@ -92,10 +92,8 @@ if (filmCards.length === 0) {
 
     render(filmsList, showMoreButtonComponent.getElement(), renderPosition.beforeEnd);
 
-    const showMoreButton = showMoreButtonComponent.getElement();
+    showMoreButtonComponent.setClickHandler(() => {
 
-    showMoreButton.addEventListener('click', (evt) => {
-      evt.preventDefault();
       filmCards
         .slice(renderedFilmCardsCount, renderedFilmCardsCount + SHOW_MORE_BUTTON_STEP)
         .forEach((item) => renderFilmCard(filmsListMainContainer, item));
@@ -103,7 +101,7 @@ if (filmCards.length === 0) {
       renderedFilmCardsCount += SHOW_MORE_BUTTON_STEP;
 
       if (renderedFilmCardsCount >= filmCards.length) {
-        showMoreButton.remove();
+        showMoreButtonComponent.getElement().remove();
       }
     });
   }
