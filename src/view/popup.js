@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 export const createPopupTemplate = (film) => {
 
   const {
@@ -128,25 +128,13 @@ export const createPopupTemplate = (film) => {
 </section>`;
 };
 
-export default class PopupView {
+export default class PopupView extends AbstractView{
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

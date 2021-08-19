@@ -16,12 +16,8 @@ import {
   FILM_WRITERS,
   MONTHES
 } from '../consts.js';
-import {
-  generateArrayOfRandomLength,
-  generateRandomIndexFromArray,
-  getRandomFloat,
-  getRandomInteger
-} from '../utils.js';
+import { generateArrayOfRandomLength, generateRandomIndexFromArray, getRandomFloat, getRandomInteger } from '../view/common.js';
+
 
 const generateFilmRating = () => getRandomFloat(0, 10);
 

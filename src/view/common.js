@@ -1,30 +1,3 @@
-export const renderPosition = {
-  afterBegin: 'afterbegin',
-  beforeEnd: 'beforeend',
-  afterEnd: 'afterend',
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case renderPosition.afterBegin:
-      container.prepend(element);
-      break;
-    case renderPosition.beforeEnd:
-      container.append(element);
-      break;
-    case renderPosition.afterEnd:
-      container.after(element);
-      break;
-  }
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement('div');
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 export const getRandomInteger = (a = 0, b = 1) => {
