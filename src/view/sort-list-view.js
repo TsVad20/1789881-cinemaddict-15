@@ -1,6 +1,7 @@
 import AbstractView from './abstract.js';
 
-const createSortTemplate = () => (
+
+const createSortListTemplate = () => (
   `<ul class="sort">
 <li><a href="#" class="sort__button sort__button-default sort__button--active">Sort by default</a></li>
 <li><a href="#" class="sort__button sort__button-date">Sort by date</a></li>
@@ -8,19 +9,19 @@ const createSortTemplate = () => (
 </ul>`
 );
 
-export default class SortView extends AbstractView{
+export default class SortListView extends AbstractView{
   constructor() {
     super();
     this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
-    return createSortTemplate();
+    return createSortListTemplate();
   }
 
   _clickHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.click(evt);
   }
 
   /*setSortByDefaultClickHandler(callback) {

@@ -1,6 +1,6 @@
 import AbstractView from './abstract.js';
 
-const createSiteMenuTemplate = (filters) => (
+const createMainNavigationTemplate = (filters) => (
   `<nav class="main-navigation">
   <div class="main-navigation__items">
     <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
@@ -13,13 +13,13 @@ const createSiteMenuTemplate = (filters) => (
 );
 
 
-export default class SiteMenuView extends AbstractView{
+export default class MainNavigationView extends AbstractView{
   constructor(filters) {
     super();
     this._filters = filters;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._filters);
+    return createMainNavigationTemplate(this._filters);
   }
 }
