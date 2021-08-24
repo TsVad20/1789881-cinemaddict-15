@@ -21,9 +21,9 @@ render(headerContainer, headerProfileComponent, renderPosition.beforeEnd); //с�
 
 render(footerStatisticsSection, new StatisticsSectionView(filmCards), renderPosition.beforeEnd); //секция статистики
 
-const filmsListPresenter = new FilmsListPresenter(mainContainer,filters,filmCards);
+const filmsListPresenter = new FilmsListPresenter(mainContainer,filters);
 
-filmsListPresenter.init();
+filmsListPresenter.init(filmCards);
 
 /*sortComponent.setClickHandler((evt)=>console.log(evt.target));
   sortComponent.getElement().addEventListener('click',(evt)=>console.log(evt.target));

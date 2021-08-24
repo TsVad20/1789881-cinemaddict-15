@@ -7,12 +7,12 @@ import PopupView from '../view/popup-view.js';
 import { EXTRA_FILM_LIST_CARD_COUNT, SHOW_MORE_BUTTON_STEP } from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer,filters,films) {
+  constructor(filmsContainer,filters) {
     this._filmsContainer = filmsContainer;
     this._filmsFilters = filters;
-    this._filmCards = films.slice();
     this._mainNavigationComponent = new MainNavigationView(filters);
     this._sortComponent = new SortListView();
     this._filmsListComponent = new FilmsListView();
@@ -20,14 +20,23 @@ export default class FilmsListPresenter {
     this._popupComponent = new PopupView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
     this.filmCardPresenter = new FilmCardPresenter();
+    this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
+    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
-  init() {
+  init(films) {
+    this._filmCards = films.slice();
     this._renderFilmsBoard();
   }
 
   _renderFilters() {
     render(this._filmsContainer, this._mainNavigationComponent, renderPosition.beforeEnd);
+  }
+
+  _handleFilmChange(container,updatedFilm) {
+    this._filmCards = updateItem(this._filmCards, updatedFilm);
+    this.filmCardPresenter.get(updatedFilm.id).init(container,updatedFilm);
   }
 
   _renderSort() {
@@ -57,9 +66,8 @@ export default class FilmsListPresenter {
 
   _renderMainFilmsList() {
 
-    for (let cardIndex = 0; cardIndex < Math.min(this._filmCards.length, SHOW_MORE_BUTTON_STEP); cardIndex++) {
-      this.filmCardPresenter.init(this._filmsListMainContainer, this._filmCards[cardIndex]);
-    }
+    this._renderFilms(this._filmsListMainContainer, 0, Math.min(this._filmCards.length, SHOW_MORE_BUTTON_STEP));
+
     if (this._filmCards.length > SHOW_MORE_BUTTON_STEP) {
       this._renderShowMoreButton();
     }
@@ -67,36 +75,37 @@ export default class FilmsListPresenter {
 
   _renderTopRatedFilmsList() {
 
-    for (let cardIndex = 0; cardIndex < EXTRA_FILM_LIST_CARD_COUNT; cardIndex++) {
-      this.filmCardPresenter.init(this._filmListTopRatedContainer, this._topRaitedFilms[cardIndex]);
-    }
+    this._renderFilms(this._filmListTopRatedContainer, 0, EXTRA_FILM_LIST_CARD_COUNT);
+
   }
 
   _renderMostCommentedFilmsList() {
 
-    for (let cardIndex = 0; cardIndex < EXTRA_FILM_LIST_CARD_COUNT; cardIndex++) {
-      this.filmCardPresenter.init(this._filmListMostCommentedContainer, this._mostCommentedFilms[cardIndex]);
+    this._renderFilms(this._filmListMostCommentedContainer, 0, EXTRA_FILM_LIST_CARD_COUNT);
+
+  }
+
+  _handleShowMoreButtonClick() {
+    this._renderFilms(this._filmsListMainContainer, this._renderedFilmCardsCount, this._renderedFilmCardsCount + SHOW_MORE_BUTTON_STEP);
+    this._renderedFilmCardsCount += SHOW_MORE_BUTTON_STEP;
+
+    if (this._renderedFilmCardsCount >= this._filmCards.length) {
+      remove(this._showMoreButtonComponent);
     }
   }
 
   _renderShowMoreButton() {
 
-    let renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
-
     render(this._filmsList, this._showMoreButtonComponent, renderPosition.beforeEnd);
 
-    this._showMoreButtonComponent.setClickHandler(() => {
+    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
 
-      this._filmCards
-        .slice(renderedFilmCardsCount, renderedFilmCardsCount + SHOW_MORE_BUTTON_STEP)
-        .forEach((item) => this.filmCardPresenter.init(this._filmsListMainContainer, item));
+  }
 
-      renderedFilmCardsCount += SHOW_MORE_BUTTON_STEP;
-
-      if (renderedFilmCardsCount >= this._filmCards.length) {
-        remove(this._showMoreButtonComponent);
-      }
-    });
+  _renderFilms(container,from, to) {
+    this._filmCards
+      .slice(from, to)
+      .forEach((filmCard) => this.filmCardPresenter.init(container, filmCard));
   }
 
   _renderFilmsBoard() {
