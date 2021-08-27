@@ -35,7 +35,7 @@ export default class FilmCardPresenter {
 
     document.querySelector('body').classList.add('hide-overflow');
 
-    this._footerContainer.appendChild(popupComponent.getElement());
+    this._footerContainer.after(popupComponent.getElement());
 
     const onEscKeyDown = (evt) => {
 

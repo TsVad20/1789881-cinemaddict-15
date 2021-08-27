@@ -1,5 +1,4 @@
 import FilmsListView from '../view/films-list-view.js';
-import MainNavigationView from '../view/main-navigation-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import SortListView from '../view/sort-list-view.js';
 import {remove, render, renderPosition} from '../utils/render.js';
@@ -7,13 +6,11 @@ import PopupView from '../view/popup-view.js';
 import { EXTRA_FILM_LIST_CARD_COUNT, SHOW_MORE_BUTTON_STEP } from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
-import { updateItem } from '../utils/common.js';
+
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer,filters) {
+  constructor(filmsContainer) {
     this._filmsContainer = filmsContainer;
-    this._filmsFilters = filters;
-    this._mainNavigationComponent = new MainNavigationView(filters);
     this._sortComponent = new SortListView();
     this._filmsListComponent = new FilmsListView();
     this._noFilmComponent = new NoFilmView();
@@ -22,21 +19,12 @@ export default class FilmsListPresenter {
     this.filmCardPresenter = new FilmCardPresenter();
     this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._handleFilmChange = this._handleFilmChange.bind(this);
+    //this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(films) {
     this._filmCards = films.slice();
     this._renderFilmsBoard();
-  }
-
-  _renderFilters() {
-    render(this._filmsContainer, this._mainNavigationComponent, renderPosition.beforeEnd);
-  }
-
-  _handleFilmChange(container,updatedFilm) {
-    this._filmCards = updateItem(this._filmCards, updatedFilm);
-    this.filmCardPresenter.get(updatedFilm.id).init(container,updatedFilm);
   }
 
   _renderSort() {
@@ -109,8 +97,6 @@ export default class FilmsListPresenter {
   }
 
   _renderFilmsBoard() {
-
-    this._renderFilters();
 
     this._renderSort();
 
