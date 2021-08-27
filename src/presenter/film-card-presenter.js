@@ -1,14 +1,16 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
-import {remove, render, renderPosition} from '../utils/render.js';
+import {
+  remove,
+  render,
+  renderPosition
+} from '../utils/render.js';
 
 export default class FilmCardPresenter {
 
-  constructor(filmContainer,film) {
+  constructor(filmContainer, film) {
     this._filmContainer = filmContainer;
     this._filmCard = film;
-    this._popupComponent = new PopupView();
-
   }
 
   init(filmContainer, film) {
@@ -17,17 +19,17 @@ export default class FilmCardPresenter {
 
   }
 
-  _renderFilmCard(filmContainer, film){
+  _renderFilmCard(filmContainer, film) {
 
     this._filmCardComponent = new FilmCardView(film);
 
-    this._filmCardComponent.setClickHandler(()=>{
+    this._filmCardComponent.setClickHandler(() => {
       this._renderPopup(film);
     });
     render(filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
   }
 
-  _renderPopup(film){
+  _renderPopup(film) {
 
     const popupComponent = new PopupView(film);
 
@@ -48,7 +50,7 @@ export default class FilmCardPresenter {
 
     };
 
-    popupComponent.setClickHandler(()=>{
+    popupComponent.setClickHandler(() => {
       document.body.classList.remove('hide-overflow');
       remove(popupComponent);
     });
