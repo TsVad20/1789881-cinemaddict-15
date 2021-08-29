@@ -132,31 +132,53 @@ export default class PopupView extends AbstractView{
   constructor(film) {
     super();
     this._film = film;
-    this._clickHandler = this._clickHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._clickCloseButtonHandler = this._clickCloseButtonHandler.bind(this);
+    this._clickAddToWatchlistHandler = this._clickAddToWatchlistHandler.bind(this);
+    this._clickAlreadyWatchedHandler = this._clickAlreadyWatchedHandler.bind(this);
+    this._clickAddToFavoritesHandler = this._clickAddToFavoritesHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
   }
 
-  _clickHandler(evt) {
+  _clickCloseButtonHandler(evt) {
     evt.preventDefault();
-    this._callback.click(evt);
+    this._callback.onCloseButtonClick();
   }
 
-  setClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
-  }
-
-  _formSubmitHandler(evt) {
+  _clickAddToWatchlistHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(evt);
+    this._callback.onAddToWatchlistClick();
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  _clickAlreadyWatchedHandler(evt) {
+    evt.preventDefault();
+    this._callback.onAlreadyWatchedClick();
+  }
+
+  _clickAddToFavoritesHandler(evt) {
+    evt.preventDefault();
+    this._callback.onAddToFavoritesClick();
+  }
+
+  setCloseButtonClickHandler(callback) {
+    this._callback.onCloseButtonClick = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickCloseButtonHandler);
+  }
+
+  setAddToWatchlistClickHandler(callback) {
+    this._callback.onAddToWatchlistClick = callback;
+    this.getElement().querySelector('#watchlist').addEventListener('click', this._clickAddToWatchlistHandler);
+  }
+
+  setAlreadyWatchedHandler(callback) {
+    this._callback.onAlreadyWatchedClick = callback;
+    this.getElement().querySelector('#watched').addEventListener('click', this._clickAlreadyWatchedHandler);
+  }
+
+  setAddToFavoritesHandler(callback) {
+    this._callback.onAddToFavoritesClick = callback;
+    this.getElement().querySelector('#favorite').addEventListener('click', this._clickAddToFavoritesHandler);
   }
 }
