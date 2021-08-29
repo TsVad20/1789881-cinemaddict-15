@@ -11,6 +11,7 @@ import MostCommentedListView from '../view/most-commented-list-view.js';
 import MostCommentedContainerView from '../view/most-commented-container-view.js';
 import TopRatedListView from '../view/top-rated-list-view.js';
 import TopRatedContainerView from '../view/top-rated-container-view.js';
+import { updateItem } from '../utils/common.js';
 //import { updateItem } from '../utils/common.js';
 
 
@@ -33,8 +34,8 @@ export default class FilmsListPresenter {
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
-    //this._handleFilmCardChange = this._handleFilmCardChange.bind(this);
-    //this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleFilmCardChange = this._handleFilmCardChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
 
   }
 
@@ -44,14 +45,14 @@ export default class FilmsListPresenter {
     this._renderFilmsList();
   }
 
-  /*_handleModeChange() {
-    this._filmCardPresenter.forEach((presenter) => presenter.resetView());
-  }*/
+  _handleModeChange() {
+    this._filmCardPresenter.forEach((presenter) => presenter.resetPopup());
+  }
 
-  _handleFilmCardChange() {
+  _handleFilmCardChange(updatedFilm) {
 
-    /*this._filmCards = updateItem(this._filmCards, updatedFilms);
-    this._filmCardPresenter.get(updatedFilms.FilmId).init(updatedFilms);*/
+    this._filmCards = updateItem(this._filmCards, updatedFilm);
+    this._filmCardPresenter.get(updatedFilm.FilmId).init(updatedFilm);
   }
 
   _renderSort() {
@@ -130,7 +131,7 @@ export default class FilmsListPresenter {
   }
 
   _renderFilm(container, film) {
-    const filmCardPresenter = new FilmCardPresenter(container,this._handleFilmCardChange);
+    const filmCardPresenter = new FilmCardPresenter(container, this._handleFilmCardChange, this._handleModeChange);
     filmCardPresenter.init(film);
     this._filmCardPresenter.set(film.filmId, filmCardPresenter);
   }

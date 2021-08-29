@@ -60,3 +60,18 @@ export const replace = (newChild, oldChild) => {
 
   parent.replaceChild(newChild, oldChild);
 };
+
+export const showPopup = (parent, child) => {
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
+  document.body.classList.add('hide-overflow');
+  parent.appendChild(child);
+};
+export const hidePopup = (parent, child) => {
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
+  document.body.classList.remove('hide-overflow');
+  parent.removeChild(child);
+};

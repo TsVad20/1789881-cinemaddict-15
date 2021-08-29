@@ -1,10 +1,12 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
 import {
+  hidePopup,
   remove,
   render,
   renderPosition,
-  replace
+  replace,
+  showPopup
 } from '../utils/render.js';
 
 const Mode = {
@@ -14,17 +16,23 @@ const Mode = {
 
 export default class FilmCardPresenter {
 
-  constructor(filmContainer, changeData) {
+  constructor(filmContainer, changeData, changeMode) {
     this._filmContainer = filmContainer;
+
     this._filmCardComponent = null;
     this._popupComponent = null;
 
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-
     this._mode = Mode.DEFAULT;
-
     this._changeData = changeData;
-    //this._changeMode = changeMode;
+    this._changeMode = changeMode;
+
+    this._handleMovieCardClick = this._handleFilmCardClick.bind(this);
+    this._escKeydownHandler = this._escKeydownHandler.bind(this);
+
+    this._handlePopupCloseButtonClick = this._handlePopupCloseButtonClick.bind(this);
+    this._handleAddToWatchlistClick = this._handleAddToWatchlistClick.bind(this);
+    this._handleAddToFavoritesClick = this._handleAddToFavoritesClick.bind(this);
+    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
   }
 
   init(film) {
@@ -36,7 +44,16 @@ export default class FilmCardPresenter {
     this._filmCardComponent = new FilmCardView(film);
     this._popupComponent = new PopupView(film);
 
-    if (prevFilmCardComponent === null|| prevPopupComponent === null) {
+    this._filmCardComponent.setOpenPupupClickHandler(this._handleFilmCardClick);
+    this._filmCardComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
+    this._filmCardComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
+    this._filmCardComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
+    this._popupComponent.setCloseButtonClickHandler(this._handlePopupCloseButtonClick);
+    this._popupComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
+    this._popupComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
+    this._popupComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
+
+    if (prevFilmCardComponent === null || prevPopupComponent === null) {
       this._renderFilmCard(this._filmContainer, film);
       return;
     }
@@ -51,35 +68,38 @@ export default class FilmCardPresenter {
 
     remove(prevFilmCardComponent);
     remove(prevPopupComponent);
-    //this._renderFilmCard(filmContainer, film);
   }
 
   destroy() {
     remove(this._filmCardComponent);
+    remove(this._popupComponent);
   }
 
-  resetView(film) {
+  resetPopup() {
     if (this._mode !== Mode.DEFAULT) {
-      this._removePopup(film);
+      this._hidePopup();
     }
   }
 
   _renderFilmCard(filmContainer,film) {
     this._film = film;
     this._filmContainer = filmContainer;
-    this._filmCardComponent.setOpenPupupClickHandler(() => {
-      this._renderPopup(film);
-    });
-    this._filmCardComponent.setAddToFavoritesHandler(() => {
-      this._changeData(Object.assign({}, this._film.usersDetails, {isFavorite: !this._film.usersDetails.isFavorite}));
-    });
-    //this._changeMode();
-    //console.log(this._changeMode());
-    this._mode = Mode.EDITING;
     render(this._filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
+
+    this._filmCardComponent.setOpenPupupClickHandler(() => {
+      this._popupComponent = new PopupView(film);
+      this._footerContainer = document.querySelector('.footer');
+      this._popupComponent.setCloseButtonClickHandler(() => {
+        hidePopup(this._footerContainer, this._popupComponent);
+        document.removeEventListener('keydown', this._escKeydownHandler);
+      });
+
+      showPopup(this._footerContainer, this._popupComponent);
+      document.removeEventListener('keydown', this._escKeydownHandler);
+    });
   }
 
-  _escKeyDownHandler(evt) {
+  _escKeydownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       document.body.classList.remove('hide-overflow');
@@ -87,34 +107,62 @@ export default class FilmCardPresenter {
     }
   }
 
-  _renderPopup(film) {
-    this._film = film;
-    this._footerContainer = document.querySelector('.footer');
-    document.querySelector('body').classList.add('hide-overflow');
-    this._footerContainer.after(this._popupComponent.getElement());
-    this._removePopup();
-  }
-
-  _removePopup(film) {
-    this._film = film;
-    this._popupComponent.setCloseButtonClickHandler(() => {
-      document.body.classList.remove('hide-overflow');
-      remove(this._popupComponent);
-      document.removeEventListener('keydown', this._escKeyDownHandler);
-    });
+  _hidePopup() {
+    hidePopup(this._popupContainer, this._popupComponent);
+    document.removeEventListener('keydown', this._escKeydownHandler);
     this._mode = Mode.DEFAULT;
-    document.addEventListener('keydown', this._escKeyDownHandler);
-
   }
-  /*_handleFavoriteClick() {
+
+  _showPopup() {
+    showPopup(this._popupContainer, this._popupComponent);
+    document.addEventListener('keydown', this._escKeydownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
+  }
+
+  _handleFilmCardClick() {
+    if (this._mode !== Mode.EDITING) {
+      this._showPopup();
+    }
+  }
+
+  _handlePopupCloseButtonClick() {
+    this._hidePopup();
+  }
+
+  _handleAddToWatchlistClick() {
     this._changeData(
       Object.assign(
         {},
-        this._task,
+        this._film.userDetails,
         {
-          isFavorite: !this._task.isFavorite,
+          addedToWatchlist: !this._film.userDetails.addedToWatchlist,
         },
       ),
     );
-  }*/
+  }
+
+  _handleAddToFavoritesClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._film.userDetails,
+        {
+          isFavorite: !this._film.userDetails.isFavorite,
+        },
+      ),
+    );
+  }
+
+  _handleAlreadyWatchedClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._film.userDetails,
+        {
+          isArchive: !this._film.userDetails,
+        },
+      ),
+    );
+  }
 }
