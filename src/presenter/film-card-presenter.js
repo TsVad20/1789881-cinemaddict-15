@@ -15,13 +15,14 @@ export default class FilmCardPresenter {
 
   init(filmContainer, film) {
 
+    this._filmCardComponent = new FilmCardView(film);
+    this._popupComponent = new PopupView(film);
+
     this._renderFilmCard(filmContainer, film);
 
   }
 
   _renderFilmCard(filmContainer, film) {
-
-    this._filmCardComponent = new FilmCardView(film);
 
     this._filmCardComponent.setClickHandler(() => {
       this._renderPopup(film);
@@ -31,28 +32,28 @@ export default class FilmCardPresenter {
 
   _renderPopup(film) {
 
-    const popupComponent = new PopupView(film);
+    this._filmCard = film;
 
     this._footerContainer = document.querySelector('.footer');
 
     document.querySelector('body').classList.add('hide-overflow');
 
-    this._footerContainer.after(popupComponent.getElement());
+    this._footerContainer.after(this._popupComponent.getElement());
 
     const onEscKeyDown = (evt) => {
 
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
         document.body.classList.remove('hide-overflow');
-        remove(popupComponent);
+        remove(this._popupComponent);
         document.removeEventListener('keydown', onEscKeyDown);
       }
 
     };
 
-    popupComponent.setClickHandler(() => {
+    this._popupComponent.setClickHandler(() => {
       document.body.classList.remove('hide-overflow');
-      remove(popupComponent);
+      remove(this._popupComponent);
     });
     document.addEventListener('keydown', onEscKeyDown);
   }
