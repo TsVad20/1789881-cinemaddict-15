@@ -26,7 +26,7 @@ export default class FilmCardPresenter {
     this._changeData = changeData;
     this._changeMode = changeMode;
 
-    this._handleMovieCardClick = this._handleFilmCardClick.bind(this);
+    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._escKeydownHandler = this._escKeydownHandler.bind(this);
 
     this._handlePopupCloseButtonClick = this._handlePopupCloseButtonClick.bind(this);
@@ -134,9 +134,9 @@ export default class FilmCardPresenter {
     this._changeData(
       Object.assign(
         {},
-        this._film.userDetails,
+        this._film.usersDetails,
         {
-          addedToWatchlist: !this._film.userDetails.addedToWatchlist,
+          addedToWatchlist: !this._film.usersDetails.addedToWatchlist,
         },
       ),
     );
@@ -146,9 +146,9 @@ export default class FilmCardPresenter {
     this._changeData(
       Object.assign(
         {},
-        this._film.userDetails,
+        this._film.usersDetails,
         {
-          isFavorite: !this._film.userDetails.isFavorite,
+          isFavorite: !this._film.usersDetails.isFavorite,
         },
       ),
     );
@@ -158,9 +158,9 @@ export default class FilmCardPresenter {
     this._changeData(
       Object.assign(
         {},
-        this._film.userDetails,
+        this._film.usersDetails,
         {
-          isArchive: !this._film.userDetails,
+          isArchive: !this._film.usersDetails,
         },
       ),
     );
