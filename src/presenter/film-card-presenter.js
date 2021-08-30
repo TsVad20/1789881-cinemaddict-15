@@ -1,13 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
-import {
-  hidePopup,
-  remove,
-  render,
-  renderPosition,
-  replace,
-  showPopup
-} from '../utils/render.js';
+import {hidePopup, remove, render, renderPosition, replace, showPopup} from '../utils/render.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -16,8 +9,9 @@ const Mode = {
 
 export default class FilmCardPresenter {
 
-  constructor(filmContainer, changeData, changeMode) {
+  constructor(filmContainer, popupContainer, changeData, changeMode) {
     this._filmContainer = filmContainer;
+    this._popupContainer = popupContainer;
 
     this._filmCardComponent = null;
     this._popupComponent = null;
@@ -54,7 +48,7 @@ export default class FilmCardPresenter {
     this._popupComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
 
     if (prevFilmCardComponent === null || prevPopupComponent === null) {
-      this._renderFilmCard(this._filmContainer, film);
+      render(this._filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
       return;
     }
 
@@ -81,29 +75,10 @@ export default class FilmCardPresenter {
     }
   }
 
-  _renderFilmCard(filmContainer,film) {
-    this._film = film;
-    this._filmContainer = filmContainer;
-    render(this._filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
-
-    this._filmCardComponent.setOpenPupupClickHandler(() => {
-      this._popupComponent = new PopupView(film);
-      this._footerContainer = document.querySelector('.footer');
-      this._popupComponent.setCloseButtonClickHandler(() => {
-        hidePopup(this._footerContainer, this._popupComponent);
-        document.removeEventListener('keydown', this._escKeydownHandler);
-      });
-
-      showPopup(this._footerContainer, this._popupComponent);
-      document.removeEventListener('keydown', this._escKeydownHandler);
-    });
-  }
-
   _escKeydownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      document.body.classList.remove('hide-overflow');
-      remove(this._popupComponent);
+      this._hidePopup();
     }
   }
 
@@ -131,38 +106,21 @@ export default class FilmCardPresenter {
   }
 
   _handleAddToWatchlistClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._film.usersDetails,
-        {
-          addedToWatchlist: !this._film.usersDetails.addedToWatchlist,
-        },
-      ),
-    );
+    const updatedFilm = this._film;
+    updatedFilm.usersDetails.addedToWatchlist = !this._film.usersDetails.addedToWatchlist;
+    this._changeData(updatedFilm);
   }
 
   _handleAddToFavoritesClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._film.usersDetails,
-        {
-          isFavorite: !this._film.usersDetails.isFavorite,
-        },
-      ),
-    );
+    const updatedFilm = this._film;
+    updatedFilm.usersDetails.isFavorite = !this._film.usersDetails.isFavorite;
+    this._changeData(updatedFilm);
   }
 
   _handleAlreadyWatchedClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._film.usersDetails,
-        {
-          isArchive: !this._film.usersDetails,
-        },
-      ),
-    );
+    const updatedFilm = this._film;
+    updatedFilm.usersDetails.isArchive = !this._film.usersDetails.isArchive;
+    this._changeData(updatedFilm);
   }
+
 }

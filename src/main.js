@@ -24,7 +24,7 @@ render(headerContainerComponent, mainContainerComponent, renderPosition.afterEnd
 render(mainContainerComponent, menuContainerComponent, renderPosition.beforeEnd); //секция menu
 render(mainContainerComponent, footerContainerComponent, renderPosition.afterEnd); //секция footer
 
-const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement());
+const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), footerContainerComponent.getElement());
 
 filmsListPresenter.init(filmCards);
 

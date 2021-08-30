@@ -12,12 +12,11 @@ import MostCommentedContainerView from '../view/most-commented-container-view.js
 import TopRatedListView from '../view/top-rated-list-view.js';
 import TopRatedContainerView from '../view/top-rated-container-view.js';
 import { updateItem } from '../utils/common.js';
-//import { updateItem } from '../utils/common.js';
-
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer) {
+  constructor(filmsContainer, popupContainer) {
     this._filmsContainer = filmsContainer;
+    this._popupContainer = popupContainer;
     this._sortComponent = new SortListView();
     this._filmsListComponent = new FilmsListView();
     this._noFilmComponent = new NoFilmView();
@@ -50,9 +49,8 @@ export default class FilmsListPresenter {
   }
 
   _handleFilmCardChange(updatedFilm) {
-
     this._filmCards = updateItem(this._filmCards, updatedFilm);
-    this._filmCardPresenter.get(updatedFilm.FilmId).init(updatedFilm);
+    this._filmCardPresenter.get(updatedFilm.filmId).init(updatedFilm);
   }
 
   _renderSort() {
@@ -131,7 +129,7 @@ export default class FilmsListPresenter {
   }
 
   _renderFilm(container, film) {
-    const filmCardPresenter = new FilmCardPresenter(container, this._handleFilmCardChange, this._handleModeChange);
+    const filmCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleFilmCardChange, this._handleModeChange);
     filmCardPresenter.init(film);
     this._filmCardPresenter.set(film.filmId, filmCardPresenter);
   }
