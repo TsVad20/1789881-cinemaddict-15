@@ -56,21 +56,21 @@ export default class FilmCardView extends AbstractView {
 
   _clickAddToWatchlistHandler(evt) {
     evt.preventDefault();
-    this._callback.onAddToWatchlistClick();
+    this._callback.onAddToWatchlistClick(evt);
   }
 
   _clickAlreadyWatchedHandler(evt) {
     evt.preventDefault();
-    this._callback.onAlreadyWatchedClick();
+    this._callback.onAlreadyWatchedClick(evt);
   }
 
   _clickAddToFavoritesHandler(evt) {
     evt.preventDefault();
-    this._callback.onAddToFavoritesClick();
+    this._callback.onAddToFavoritesClick(evt);
   }
 
 
-  setOpenPupupClickHandler(callback) {
+  setOpenPopupClickHandler(callback) {
     this._callback.onCardClick = callback;
     this. getElement().querySelector('.film-card__title').addEventListener('click', this._openPopupClickHandler);
     this. getElement().querySelector('.film-card__poster').addEventListener('click', this._openPopupClickHandler);

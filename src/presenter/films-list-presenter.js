@@ -30,6 +30,8 @@ export default class FilmsListPresenter {
     this._mostCommentedListComponent = new MostCommentedListView;
 
     this._filmCardPresenter = new Map();
+    this._topRatedCardPresenter = new Map();
+    this._mostCommentedCardPresenter = new Map();
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
@@ -46,11 +48,21 @@ export default class FilmsListPresenter {
 
   _handleModeChange() {
     this._filmCardPresenter.forEach((presenter) => presenter.resetPopup());
+    this._topRatedCardPresenter.forEach((presenter) => presenter.resetPopup());
+    this._mostCommentedCardPresenter.forEach((presenter) => presenter.resetPopup());
   }
 
   _handleFilmCardChange(updatedFilm) {
     this._filmCards = updateItem(this._filmCards, updatedFilm);
-    this._filmCardPresenter.get(updatedFilm.filmId).init(updatedFilm);
+    if (this._filmCardPresenter.has(updatedFilm.filmId)) {
+      this._filmCardPresenter.get(updatedFilm.filmId).init(updatedFilm);
+    }
+    if (this._topRatedCardPresenter.has(updatedFilm.filmId)) {
+      this._topRatedCardPresenter.get(updatedFilm.filmId).init(updatedFilm);
+    }
+    if (this._mostCommentedCardPresenter.has(updatedFilm.filmId)) {
+      this._mostCommentedCardPresenter.get(updatedFilm.filmId).init(updatedFilm);
+    }
   }
 
   _renderSort() {
@@ -129,9 +141,21 @@ export default class FilmsListPresenter {
   }
 
   _renderFilm(container, film) {
-    const filmCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleFilmCardChange, this._handleModeChange);
-    filmCardPresenter.init(film);
-    this._filmCardPresenter.set(film.filmId, filmCardPresenter);
+    if (container === this._allMoviesListComponent) {
+      const filmCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleFilmCardChange, this._handleModeChange);
+      filmCardPresenter.init(film);
+      this._filmCardPresenter.set(film.filmId, filmCardPresenter);
+    }
+    if (container === this._topRatedListComponent) {
+      const topRatedCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleFilmCardChange, this._handleModeChange);
+      topRatedCardPresenter.init(film);
+      this._topRatedCardPresenter.set(film.filmId, topRatedCardPresenter);
+    }
+    if (container === this._mostCommentedListComponent) {
+      const mostCommentedCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleFilmCardChange, this._handleModeChange);
+      mostCommentedCardPresenter.init(film);
+      this._mostCommentedCardPresenter.set(film.filmId, mostCommentedCardPresenter);
+    }
   }
 
   _renderFilms(container, from, to) {

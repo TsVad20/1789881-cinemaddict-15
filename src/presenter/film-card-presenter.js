@@ -1,6 +1,13 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
-import {hidePopup, remove, render, renderPosition, replace, showPopup} from '../utils/render.js';
+import {
+  hidePopup,
+  remove,
+  render,
+  renderPosition,
+  replace,
+  showPopup
+} from '../utils/render.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -38,7 +45,7 @@ export default class FilmCardPresenter {
     this._filmCardComponent = new FilmCardView(film);
     this._popupComponent = new PopupView(film);
 
-    this._filmCardComponent.setOpenPupupClickHandler(this._handleFilmCardClick);
+    this._filmCardComponent.setOpenPopupClickHandler(this._handleFilmCardClick);
     this._filmCardComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
     this._filmCardComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
     this._filmCardComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
@@ -52,9 +59,7 @@ export default class FilmCardPresenter {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
-      replace(this._filmCardComponent, prevFilmCardComponent);
-    }
+    replace(this._filmCardComponent, prevFilmCardComponent);
 
     if (this._mode === Mode.EDITING) {
       replace(this._popupComponent, prevPopupComponent);
@@ -106,21 +111,84 @@ export default class FilmCardPresenter {
   }
 
   _handleAddToWatchlistClick() {
-    const updatedFilm = this._film;
-    updatedFilm.usersDetails.addedToWatchlist = !this._film.usersDetails.addedToWatchlist;
-    this._changeData(updatedFilm);
+    this._changeData(
+
+      Object.assign(
+
+        {},
+
+        this._film,
+
+        {
+
+          usersDetails: {
+
+            ...this._film.usersDetails,
+
+            addedToWatchlist: !this._film.usersDetails.addedToWatchlist,
+
+          },
+
+        },
+
+      ),
+
+    );
+
   }
 
+
   _handleAddToFavoritesClick() {
-    const updatedFilm = this._film;
-    updatedFilm.usersDetails.isFavorite = !this._film.usersDetails.isFavorite;
-    this._changeData(updatedFilm);
+    this._changeData(
+
+      Object.assign(
+
+        {},
+
+        this._film,
+
+        {
+
+          usersDetails: {
+
+            ...this._film.usersDetails,
+
+            isFavorite: !this._film.usersDetails.isFavorite,
+
+          },
+
+        },
+
+      ),
+
+    );
+
   }
 
   _handleAlreadyWatchedClick() {
-    const updatedFilm = this._film;
-    updatedFilm.usersDetails.isArchive = !this._film.usersDetails.isArchive;
-    this._changeData(updatedFilm);
-  }
+    this._changeData(
 
+      Object.assign(
+
+        {},
+
+        this._film,
+
+        {
+
+          usersDetails: {
+
+            ...this._film.usersDetails,
+
+            isArchive: !this._film.usersDetails.isArchive,
+
+          },
+
+        },
+
+      ),
+
+    );
+
+  }
 }

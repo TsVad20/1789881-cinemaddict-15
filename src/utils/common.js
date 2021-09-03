@@ -23,7 +23,7 @@ export const generateArrayOfRandomLength = (array) => {
 };
 
 export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
+  const index = items.findIndex((item) => item.filmId === update.filmId);
 
   if (index === -1) {
     return items;
