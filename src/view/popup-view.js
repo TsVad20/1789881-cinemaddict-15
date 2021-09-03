@@ -15,7 +15,20 @@ export const createPopupTemplate = (film) => {
     filmDuration,
     filmDescription,
     filmGenres,
+    usersDetails,
   } = film;
+
+  const addedToWatchlistClassName = usersDetails.addedToWatchlist
+    ? 'film-details__control-button film-details__control-button--watchlist film-details__control-button--active'
+    : 'film-details__control-button film-details__control-button--watchlist';
+
+  const isArchiveClassName = usersDetails.isArchive
+    ? 'film-details__control-button film-details__control-button--watched film-details__control-button--active'
+    : 'film-details__control-button film-details__control-button--watched';
+
+  const isFavoriteClassName = usersDetails.isFavorite
+    ? 'film-details__control-button film-details__control-button--favorite film-details__control-button--active'
+    : 'film-details__control-button film-details__control-button--favorite';
 
   const genres = filmGenres.map((item) => `<span class="film-details__genre">${item}</span>`);
 
@@ -89,9 +102,9 @@ export const createPopupTemplate = (film) => {
       </div>
     </div>
     <section class="film-details__controls">
-      <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-      <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-      <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+      <button type="button" class="${addedToWatchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
+      <button type="button" class="${isArchiveClassName}" id="watched" name="watched">Already watched</button>
+      <button type="button" class="${isFavoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
     </section>
   </div>
   <div class="film-details__bottom-container">
@@ -132,9 +145,53 @@ export default class PopupView extends AbstractView{
   constructor(film) {
     super();
     this._film = film;
+    this._clickCloseButtonHandler = this._clickCloseButtonHandler.bind(this);
+    this._clickAddToWatchlistHandler = this._clickAddToWatchlistHandler.bind(this);
+    this._clickAlreadyWatchedHandler = this._clickAlreadyWatchedHandler.bind(this);
+    this._clickAddToFavoritesHandler = this._clickAddToFavoritesHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
+  }
+
+  _clickCloseButtonHandler(evt) {
+    evt.preventDefault();
+    this._callback.onCloseButtonClick();
+  }
+
+  _clickAddToWatchlistHandler(evt) {
+    evt.preventDefault();
+    this._callback.onAddToWatchlistClick();
+  }
+
+  _clickAlreadyWatchedHandler(evt) {
+    evt.preventDefault();
+    this._callback.onAlreadyWatchedClick();
+  }
+
+  _clickAddToFavoritesHandler(evt) {
+    evt.preventDefault();
+    this._callback.onAddToFavoritesClick();
+  }
+
+  setCloseButtonClickHandler(callback) {
+    this._callback.onCloseButtonClick = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickCloseButtonHandler);
+  }
+
+  setAddToWatchlistClickHandler(callback) {
+    this._callback.onAddToWatchlistClick = callback;
+    this.getElement().querySelector('#watchlist').addEventListener('click', this._clickAddToWatchlistHandler);
+  }
+
+  setAlreadyWatchedHandler(callback) {
+    this._callback.onAlreadyWatchedClick = callback;
+    this.getElement().querySelector('#watched').addEventListener('click', this._clickAlreadyWatchedHandler);
+  }
+
+  setAddToFavoritesHandler(callback) {
+    this._callback.onAddToFavoritesClick = callback;
+    this.getElement().querySelector('#favorite').addEventListener('click', this._clickAddToFavoritesHandler);
   }
 }

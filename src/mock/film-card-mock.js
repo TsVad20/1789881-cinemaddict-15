@@ -5,7 +5,6 @@ import {
   COMMENT_TEXTS,
   FILM_ACTORS,
   FILM_AGES,
-  FILM_CARD_COUNT,
   FILM_COMMENTS_MAX_COUNT,
   FILM_COUNTRIES,
   FILM_DESCRIPTIONS,
@@ -16,7 +15,8 @@ import {
   FILM_WRITERS,
   MONTHES
 } from '../consts.js';
-import { generateArrayOfRandomLength, generateRandomIndexFromArray, getRandomFloat, getRandomInteger } from '../view/common.js';
+import { generateArrayOfRandomLength, generateRandomIndexFromArray, getRandomFloat, getRandomInteger } from '../utils/common.js';
+import {nanoid} from 'nanoid';
 
 
 const generateFilmRating = () => getRandomFloat(0, 10);
@@ -61,7 +61,7 @@ const generateUsersDetails = () => {
 };
 
 export const generateFilmCard = () => ({
-  filmId: getRandomInteger(1000, `10${FILM_CARD_COUNT}`),
+  filmId: nanoid(),
   filmPoster: `${generateRandomIndexFromArray(FILM_POSTERS)}`,
   filmTitle: generateRandomIndexFromArray(FILM_TITLES),
   filmDescription: generateRandomIndexFromArray(FILM_DESCRIPTIONS),

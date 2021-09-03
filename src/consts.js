@@ -93,3 +93,9 @@ export const MONTHES = [
   'March',
 ];
 export const SHOW_MORE_BUTTON_STEP = 5;
+
+export const SORT_TYPE = {
+  default: 'default',
+  byDate: 'by-date',
+  byRating: 'by-rating',
+};

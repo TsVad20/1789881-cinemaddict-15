@@ -1,4 +1,5 @@
-import {createElement} from '../render.js';
+import {createElement} from '../utils/render.js';
+
 export default class AbstractView {
   constructor() {
     if (new.target === AbstractView) {
