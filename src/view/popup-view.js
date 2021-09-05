@@ -1,5 +1,24 @@
 import AbstractView from './abstract.js';
-export const createPopupTemplate = (film) => {
+
+const createEmojiTemplate = (commentEmoji) => (commentEmoji) ?
+  `<span class="film-details__comment-emoji">
+    <img src="${commentEmoji}" width="55" height="55" alt="${commentEmoji}">
+  </span>`: '';
+
+const createCommentsTemplate = (comments, isComment) => (isComment) ?
+  comments.map((item) => `<li class="film-details__comment">
+  ${createEmojiTemplate(item.commentEmoji)}
+  <div>
+    <p class="film-details__comment-text">${item.commentText}</p>
+    <p class="film-details__comment-info">
+      <span class="film-details__comment-author">${item.commentAuthor}</span>
+      <span class="film-details__comment-day">${item.commentDate}</span>
+      <button class="film-details__comment-delete">Delete</button>
+    </p>
+  </div>
+</li>`) : '';
+
+export const createPopupTemplate = (data) => {
 
   const {
     filmDirector,
@@ -16,35 +35,21 @@ export const createPopupTemplate = (film) => {
     filmDescription,
     filmGenres,
     usersDetails,
-  } = film;
+  } = data;
 
-  const addedToWatchlistClassName = usersDetails.addedToWatchlist
-    ? 'film-details__control-button film-details__control-button--watchlist film-details__control-button--active'
-    : 'film-details__control-button film-details__control-button--watchlist';
+  const addedToWatchlistClassName = usersDetails.addedToWatchlist ?
+    'film-details__control-button film-details__control-button--watchlist film-details__control-button--active' :
+    'film-details__control-button film-details__control-button--watchlist';
 
-  const isArchiveClassName = usersDetails.isArchive
-    ? 'film-details__control-button film-details__control-button--watched film-details__control-button--active'
-    : 'film-details__control-button film-details__control-button--watched';
+  const isArchiveClassName = usersDetails.isArchive ?
+    'film-details__control-button film-details__control-button--watched film-details__control-button--active' :
+    'film-details__control-button film-details__control-button--watched';
 
-  const isFavoriteClassName = usersDetails.isFavorite
-    ? 'film-details__control-button film-details__control-button--favorite film-details__control-button--active'
-    : 'film-details__control-button film-details__control-button--favorite';
+  const isFavoriteClassName = usersDetails.isFavorite ?
+    'film-details__control-button film-details__control-button--favorite film-details__control-button--active' :
+    'film-details__control-button film-details__control-button--favorite';
 
   const genres = filmGenres.map((item) => `<span class="film-details__genre">${item}</span>`);
-
-  const comments = filmComments.map((item)=>`<li class="film-details__comment">
-  <span class="film-details__comment-emoji">
-    <img src="${item.commentEmoji}" width="55" height="55" alt="${item.commentEmoji}">
-  </span>
-  <div>
-    <p class="film-details__comment-text">${item.commentText}</p>
-    <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${item.commentAuthor}</span>
-      <span class="film-details__comment-day">${item.commentDate}</span>
-      <button class="film-details__comment-delete">Delete</button>
-    </p>
-  </div>
-</li>`);
 
   return `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -110,7 +115,7 @@ export const createPopupTemplate = (film) => {
   <div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmComments.length}</span></h3>
-      <ul class="film-details__comments-list">${comments.join('')}</ul>
+      <ul class="film-details__comments-list">${createCommentsTemplate(filmComments)}</ul>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label"></div>
         <label class="film-details__comment-label">
@@ -141,7 +146,7 @@ export const createPopupTemplate = (film) => {
 </section>`;
 };
 
-export default class PopupView extends AbstractView{
+export default class PopupView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;

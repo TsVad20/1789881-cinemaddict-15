@@ -1,4 +1,6 @@
-import {SORT_TYPE} from '../consts.js';
+import {
+  SORT_TYPE
+} from '../consts.js';
 import AbstractView from './abstract.js';
 
 
@@ -10,7 +12,7 @@ const createSortListTemplate = () => (
 </ul>`
 );
 
-export default class SortListView extends AbstractView{
+export default class SortListView extends AbstractView {
   constructor() {
     super();
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
@@ -25,6 +27,13 @@ export default class SortListView extends AbstractView{
       return;
     }
     evt.preventDefault();
+    const modifiers = this.getElement().querySelectorAll('.sort__button');
+    for (const value of modifiers){
+      if (value.classList.contains('sort__button--active')){
+        value.classList.remove('sort__button--active');
+      }
+    }
+    evt.target.classList.add('sort__button--active');
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
