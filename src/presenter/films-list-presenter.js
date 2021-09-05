@@ -211,6 +211,5 @@ export default class FilmsListPresenter {
       .slice(from, to)
       .forEach((filmCard) => this._renderFilm(container, filmCard));
   }
-
 }
 

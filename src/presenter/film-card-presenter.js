@@ -76,6 +76,7 @@ export default class FilmCardPresenter {
 
   resetPopup() {
     if (this._mode !== Mode.DEFAULT) {
+      this._popupComponent.reset(this._film);
       this._hidePopup();
     }
   }
@@ -83,6 +84,7 @@ export default class FilmCardPresenter {
   _escKeydownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._popupComponent.reset(this._film);
       this._hidePopup();
     }
   }
@@ -107,6 +109,7 @@ export default class FilmCardPresenter {
   }
 
   _handlePopupCloseButtonClick() {
+    this._popupComponent.reset(this._film);
     this._hidePopup();
   }
 
