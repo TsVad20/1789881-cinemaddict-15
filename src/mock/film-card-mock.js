@@ -32,7 +32,7 @@ const generateFilmReleaseDate = () => {
 const generateFilmDuration = () => `${getRandomInteger(0,5)}h ${getRandomInteger(0,60)}m`;
 
 const generatefilmComment = () => ({
-  commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}`,
+  commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
   commentText: generateRandomIndexFromArray(COMMENT_TEXTS),
   commentAuthor: generateRandomIndexFromArray(COMMENT_AUTHORS),
   commentDate: generateRandomIndexFromArray(COMMENT_DATES),

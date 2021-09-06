@@ -32,10 +32,10 @@ export const FILM_GENRES = [
   'Cartoon',
 ];
 export const COMMENT_EMOJIES = [
-  'smile.png',
-  'sleeping.png',
-  'puke.png',
-  'angry.png',
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
 ];
 export const COMMENT_TEXTS = [
   'Interesting setting and a good cast',
