@@ -33,7 +33,7 @@ export default class FilmsListPresenter {
     this._topRatedCardPresenter = new Map();
     this._mostCommentedCardPresenter = new Map();
 
-    this._currentSortType = SORT_TYPE.DEFAULT;
+    this._currentSortType = SORT_TYPE.default;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
@@ -49,12 +49,16 @@ export default class FilmsListPresenter {
     this._sourcedfilmCards = films.slice();
     this._renderSort();
     this._renderFilmsList();
+    this._renderTopRatedContainer();
+    this._renderMostCommentedContainer();
+
   }
 
   _handleModeChange() {
     this._filmCardPresenter.forEach((presenter) => presenter.resetPopup());
     this._topRatedCardPresenter.forEach((presenter) => presenter.resetPopup());
     this._mostCommentedCardPresenter.forEach((presenter) => presenter.resetPopup());
+    document.body.classList.add('hide-overflow');
   }
 
   _handleFilmCardChange(updatedFilm) {
@@ -78,7 +82,7 @@ export default class FilmsListPresenter {
 
     this._sortFilms(sortType);
     this._clearFilmsList();
-    this._renderFilmsList();
+    this._renderAllMoviesList();
   }
 
   _renderSort() {
@@ -96,6 +100,7 @@ export default class FilmsListPresenter {
         break;
       default:
         this._filmCards = this._sourcedfilmCards.slice();
+        break;
     }
 
     this._currentSortType = sortType;
@@ -113,8 +118,6 @@ export default class FilmsListPresenter {
   _renderAllMoviesContainer() {
     render(this._filmsListComponent, this._allMoviesContainerComponent, renderPosition.beforeEnd); //рендер Allmovies листа
     this._renderAllMoviesList();
-    this._renderTopRatedContainer();
-    this._renderMostCommentedContainer();
   }
 
   _renderAllMoviesList() {
@@ -167,13 +170,10 @@ export default class FilmsListPresenter {
 
   _clearFilmsList() {
     this._filmCardPresenter.forEach((presenter) => presenter.destroy());
-    this._topRatedCardPresenter.forEach((presenter) => presenter.destroy());
-    this._mostCommentedCardPresenter.forEach((presenter) => presenter.destroy());
     this._filmCardPresenter.clear();
-    this._topRatedCardPresenter.clear();
-    this._mostCommentedCardPresenter.clear();
-    this._renderedFilmCardsCount += SHOW_MORE_BUTTON_STEP;
+    this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
     remove(this._showMoreButtonComponent);
+    document.body.classList.remove('hide-overflow');
   }
 
   _renderFilm(container, film) {
