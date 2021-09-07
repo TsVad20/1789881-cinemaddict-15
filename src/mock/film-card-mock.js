@@ -26,9 +26,9 @@ const generateFilmRating = () => getRandomFloat(0, 10);
 
 const generateFilmReleaseDate = () => {
   const filmReleaseDate = {
-    filmYear: `${dayjs(getRandomInteger(1950,2021), 'year').format('YYYY')}`,
-    filmMonth: `${dayjs(getRandomInteger(0,11), 'month').format('MMMM')}`,
-    filmDay: `${dayjs(getRandomInteger(1, 365 / 12), 'day').format('DD')}`,
+    filmYear: `${dayjs().year(getRandomInteger(1950,2021)).format('YYYY')}`,
+    filmMonth: `${dayjs().month(getRandomInteger(0,11)).format('MMMM')}`,
+    filmDay: `${dayjs().day(getRandomInteger(1, 365 / 12)).format('DD')}`,
   };
   return filmReleaseDate;
 };
