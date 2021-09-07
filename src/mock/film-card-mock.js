@@ -1,6 +1,5 @@
 import {
   COMMENT_AUTHORS,
-  COMMENT_DATES,
   COMMENT_EMOJIES,
   COMMENT_TEXTS,
   FILM_ACTORS,
@@ -12,30 +11,35 @@ import {
   FILM_GENRES,
   FILM_POSTERS,
   FILM_TITLES,
-  FILM_WRITERS,
-  MONTHES
+  FILM_WRITERS
 } from '../consts.js';
 import { generateArrayOfRandomLength, generateRandomIndexFromArray, getRandomFloat, getRandomInteger } from '../utils/common.js';
 import {nanoid} from 'nanoid';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const generateFilmRating = () => getRandomFloat(0, 10);
 
 const generateFilmReleaseDate = () => {
   const filmReleaseDate = {
-    filmYear: getRandomInteger(1950, 2020),
-    filmMonth: generateRandomIndexFromArray(MONTHES),
-    filmDay: getRandomInteger(1, 365 / 12),
+    filmYear: `${dayjs(getRandomInteger(1950,2021), 'year').format('YYYY')}`,
+    filmMonth: `${dayjs(getRandomInteger(0,11), 'month').format('MMMM')}`,
+    filmDay: `${dayjs(getRandomInteger(1, 365 / 12), 'day').format('DD')}`,
   };
   return filmReleaseDate;
 };
-const generateFilmDuration = () => `${getRandomInteger(0,5)}h ${getRandomInteger(0,60)}m`;
+
+const generateFilmDuration = () => `${dayjs.duration(getRandomInteger(120,240), 'minutes').format('H[h] : mm[m]')}`;
 
 const generatefilmComment = () => ({
   commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
   commentText: generateRandomIndexFromArray(COMMENT_TEXTS),
   commentAuthor: generateRandomIndexFromArray(COMMENT_AUTHORS),
-  commentDate: generateRandomIndexFromArray(COMMENT_DATES),
+  commentDate: dayjs(dayjs().subtract(getRandomInteger(0,10000), 'minutes')).fromNow(),
 });
 
 const generatefilmComments = (commentsCount) => {
