@@ -32,10 +32,10 @@ export const FILM_GENRES = [
   'Cartoon',
 ];
 export const COMMENT_EMOJIES = [
-  'smile.png',
-  'sleeping.png',
-  'puke.png',
-  'angry.png',
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
 ];
 export const COMMENT_TEXTS = [
   'Interesting setting and a good cast',
@@ -82,16 +82,7 @@ export const FILM_AGES = [
   '16+',
   '18+',
 ];
-export const COMMENT_DATES = [
-  '2 days ago',
-  'Today',
-  '2019/12/31 23:59',
-];
-export const MONTHES = [
-  'January',
-  'February',
-  'March',
-];
+
 export const SHOW_MORE_BUTTON_STEP = 5;
 
 export const SORT_TYPE = {
