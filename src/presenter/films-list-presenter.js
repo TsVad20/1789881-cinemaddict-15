@@ -14,7 +14,8 @@ import TopRatedContainerView from '../view/top-rated-container-view.js';
 import { updateItem } from '../utils/common.js';
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer, popupContainer) {
+  constructor(filmsContainer, popupContainer, filmsModel) {
+    this._filmsModel = filmsModel;
     this._filmsContainer = filmsContainer;
     this._popupContainer = popupContainer;
     this._sortComponent = new SortListView();
@@ -52,6 +53,10 @@ export default class FilmsListPresenter {
     this._renderTopRatedContainer();
     this._renderMostCommentedContainer();
 
+  }
+
+  _getFilms() {
+    return this._filmsModel.getFilms();
   }
 
   _handleModeChange() {
