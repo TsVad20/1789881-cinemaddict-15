@@ -201,13 +201,13 @@ export default class FilmsListPresenter {
   }
 
   _renderTopRatedFilms(container, from, to) {
-    this._filmCards.sort((a, b) => b.filmRating - a.filmRating)
+    this._filmCards.slice().sort((a, b) => b.filmRating - a.filmRating)
       .slice(from, to)
       .forEach((filmCard) => this._renderFilm(container, filmCard));
   }
 
   _renderMostCommentedFilms(container, from, to) {
-    this._filmCards.sort((a, b) => b.filmComments.length - a.filmComments.length)
+    this._filmCards.slice().sort((a, b) => b.filmComments.length - a.filmComments.length)
       .slice(from, to)
       .forEach((filmCard) => this._renderFilm(container, filmCard));
   }
