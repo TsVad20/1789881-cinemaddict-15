@@ -1,5 +1,11 @@
+import dayjs from 'dayjs';
 import { COMMENT_EMOJIES } from '../consts.js';
 import SmartView from './smart.js';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const createCommentsTemplate = (comments) =>
   comments.map((item) => `<li class="film-details__comment">
@@ -10,7 +16,7 @@ const createCommentsTemplate = (comments) =>
     <p class="film-details__comment-text">${item.commentText}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${item.commentAuthor}</span>
-      <span class="film-details__comment-day">${item.commentDate}</span>
+      <span class="film-details__comment-day">${dayjs(item.commentDate).fromNow()}</span>
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>
@@ -100,11 +106,11 @@ export const createPopupTemplate = (data) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${filmReleaseDate.filmDay} ${filmReleaseDate.filmMonth} ${filmReleaseDate.filmYear}</td>
+            <td class="film-details__cell">${dayjs(filmReleaseDate).format('DD MMMM YYYY')}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${filmDuration}</td>
+            <td class="film-details__cell">${dayjs.duration(filmDuration, 'minutes').format('H[h] mm[m]')}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
