@@ -117,7 +117,7 @@ export default class FilmCardPresenter {
   _handleAddToWatchlistClick() {
     this._changeData(
       USER_ACTION.UPDATE_FILM,
-      UPDATE_TYPE.MINOR,
+      UPDATE_TYPE.PATCH,
       Object.assign(
 
         {},
@@ -146,7 +146,7 @@ export default class FilmCardPresenter {
   _handleAddToFavoritesClick() {
     this._changeData(
       USER_ACTION.UPDATE_FILM,
-      UPDATE_TYPE.MINOR,
+      UPDATE_TYPE.PATCH,
       Object.assign(
 
         {},
@@ -174,7 +174,7 @@ export default class FilmCardPresenter {
   _handleAlreadyWatchedClick() {
     this._changeData(
       USER_ACTION.UPDATE_FILM,
-      UPDATE_TYPE.MINOR,
+      UPDATE_TYPE.PATCH,
       Object.assign(
 
         {},
