@@ -8,7 +8,7 @@ import {
   replace,
   showPopup
 } from '../utils/render.js';
-import {UserAction, UpdateType} from '../consts.js';
+import {USER_ACTION, UPDATE_TYPE} from '../consts.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -116,8 +116,8 @@ export default class FilmCardPresenter {
 
   _handleAddToWatchlistClick() {
     this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      USER_ACTION.UPDATE_FILM,
+      UPDATE_TYPE.MINOR,
       Object.assign(
 
         {},
@@ -145,8 +145,8 @@ export default class FilmCardPresenter {
 
   _handleAddToFavoritesClick() {
     this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      USER_ACTION.UPDATE_FILM,
+      UPDATE_TYPE.MINOR,
       Object.assign(
 
         {},
@@ -173,8 +173,8 @@ export default class FilmCardPresenter {
 
   _handleAlreadyWatchedClick() {
     this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      USER_ACTION.UPDATE_FILM,
+      UPDATE_TYPE.MINOR,
       Object.assign(
 
         {},

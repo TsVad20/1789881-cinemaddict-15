@@ -31,7 +31,7 @@ export const FILM_GENRES = [
   'Comedy',
   'Cartoon',
 ];
-export const COMMENT_EMOJIES = [
+export const COMMENT_EMOTIONS = [
   'smile',
   'sleeping',
   'puke',
@@ -91,13 +91,13 @@ export const SORT_TYPE = {
   byRating: 'by-rating',
 };
 
-export const UserAction = {
+export const USER_ACTION = {
   UPDATE_FILM: 'UPDATE_FILM',
   ADD_FILM: 'ADD_FILM',
   DELETE_FILM: 'DELETE_FILM',
 };
 
-export const UpdateType = {
+export const UPDATE_TYPE = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',

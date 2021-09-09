@@ -27,6 +27,7 @@ const generateFilmRating = () => getRandomFloat(0, 10);
 const generateFilmDuration = () => getRandomInteger(120,240);
 
 const generatefilmComment = () => ({
+  commentId: nanoid(),
   commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
   commentText: generateRandomIndexFromArray(COMMENT_TEXTS),
   commentAuthor: generateRandomIndexFromArray(COMMENT_AUTHORS),
