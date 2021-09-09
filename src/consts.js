@@ -31,7 +31,7 @@ export const FILM_GENRES = [
   'Comedy',
   'Cartoon',
 ];
-export const COMMENT_EMOTIONS = [
+export const COMMENT_EMOJIES = [
   'smile',
   'sleeping',
   'puke',
