@@ -32,4 +32,4 @@ render(mainContainerComponent, footerContainerComponent, renderPosition.afterEnd
 
 const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), footerContainerComponent.getElement(), filmsModel);
 
-filmsListPresenter.init(filmCards);
+filmsListPresenter.init();

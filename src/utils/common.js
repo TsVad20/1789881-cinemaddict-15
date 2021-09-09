@@ -22,7 +22,7 @@ export const generateArrayOfRandomLength = (array) => {
   return array.slice(0, randomItem + 1);
 };
 
-export const updateItem = (items, update) => {
+/*export const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.filmId === update.filmId);
 
   if (index === -1) {
@@ -34,4 +34,4 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
-};
+};*/

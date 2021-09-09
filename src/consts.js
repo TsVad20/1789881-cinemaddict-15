@@ -90,3 +90,15 @@ export const SORT_TYPE = {
   byDate: 'by-date',
   byRating: 'by-rating',
 };
+
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_FILM: 'ADD_FILM',
+  DELETE_FILM: 'DELETE_FILM',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
