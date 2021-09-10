@@ -77,7 +77,7 @@ export default class FilmsListPresenter {
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case USER_ACTION.UPDATE_FILM:
+      case USER_ACTION.updateFilm:
         this._filmsModel.updateFilm(updateType, update);
         break;
     }
@@ -85,7 +85,7 @@ export default class FilmsListPresenter {
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UPDATE_TYPE.PATCH:
+      case UPDATE_TYPE.patch:
         if (this._filmCardPresenter.has(data.filmId)) {
           this._filmCardPresenter.get(data.filmId).init(data);
         }

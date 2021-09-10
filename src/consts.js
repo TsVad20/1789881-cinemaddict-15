@@ -92,13 +92,20 @@ export const SORT_TYPE = {
 };
 
 export const USER_ACTION = {
-  UPDATE_FILM: 'UPDATE_FILM',
-  ADD_FILM: 'ADD_FILM',
-  DELETE_FILM: 'DELETE_FILM',
+  updateFilm: 'updateFilm',
+  addFilm: 'addFilm',
+  deleteFilm: 'deleteFilm',
 };
 
 export const UPDATE_TYPE = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
+  patch: 'patch',
+  minor: 'minor',
+  major: 'major',
+};
+
+export const FILTER_TYPE = {
+  allMovies: 'allMovies',
+  watchlist: 'watchlist',
+  history: 'history',
+  favorites: 'favorites',
 };
