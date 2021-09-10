@@ -8,7 +8,7 @@ import FilmsListPresenter from './presenter/films-list-presenter.js';
 import MenuContainerView from './view/menu-container-view.js';
 import MainContainerView from './view/main-container-view.js';
 import FilmsModel from './model/film-cards-model.js';
-
+import FilterModel from './model/filter-model.js';
 
 const filmCards = new Array(FILM_CARD_COUNT).fill().map(generateFilmCard);
 const filters = generateFilter(filmCards);
@@ -16,6 +16,8 @@ const filters = generateFilter(filmCards);
 const filmsModel = new FilmsModel();
 
 filmsModel.setFilms(filmCards);
+
+const filterModel = new FilterModel();
 
 const body = document.querySelector('body');
 
@@ -30,6 +32,6 @@ render(headerContainerComponent, mainContainerComponent, renderPosition.afterEnd
 render(mainContainerComponent, menuContainerComponent, renderPosition.beforeEnd); //секция menu
 render(mainContainerComponent, footerContainerComponent, renderPosition.afterEnd); //секция footer
 
-const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), footerContainerComponent.getElement(), filmsModel);
+const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), footerContainerComponent.getElement(), filmsModel, filterModel);
 
 filmsListPresenter.init();
