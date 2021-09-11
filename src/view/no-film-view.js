@@ -1,24 +1,23 @@
+import { NO_FILM_TEXT_TYPE } from '../consts.js';
 import AbstractView from './abstract.js';
 
-const createNoFilmTemplate = () => (
-  `<section class="films">
-  <section class="films-list">
-    <h2 class="films-list__title">There are no movies in our database</h2>
+const createNoFilmTemplate = (filterType) => {
+  const noFilmTextValue = NO_FILM_TEXT_TYPE[filterType];
 
-    <!--
-      Значение отображаемого текста зависит от выбранного фильтра:
-        * All movies – 'There are no movies in our database'
-        * Watchlist — 'There are no movies to watch now';
-        * History — 'There are no watched movies now';
-        * Favorites — 'There are no favorite movies now'.
-    -->
+  return `<section class="films">
+  <section class="films-list">
+    <h2 class="films-list__title">${noFilmTextValue}</h2>
   </section>
-</section>`
-);
+</section>`;
+};
 
 export default class NoFilmView extends AbstractView {
+  constructor(filterType) {
+    super();
+    this._filterType = filterType;
+  }
 
   getTemplate() {
-    return createNoFilmTemplate();
+    return createNoFilmTemplate(this._filterType);
   }
 }

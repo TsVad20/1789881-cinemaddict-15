@@ -109,3 +109,10 @@ export const FILTER_TYPE = {
   HISTORY: 'history',
   FAVORITES: 'favorites',
 };
+
+export const NO_FILM_TEXT_TYPE = {
+  [FILTER_TYPE.ALL]: 'There are no movies in our database',
+  [FILTER_TYPE.WATCHLIST]: 'There are no movies to watch now',
+  [FILTER_TYPE.HISTORY]: 'There are no watched movies now',
+  [FILTER_TYPE.FAVORITES]: 'There are no favorite movies now',
+};

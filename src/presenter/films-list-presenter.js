@@ -2,7 +2,7 @@ import FilmsListView from '../view/films-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import SortListView from '../view/sort-container-view.js';
 import {remove, render, renderPosition} from '../utils/render.js';
-import {EXTRA_FILM_LIST_CARD_COUNT, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
+import {EXTRA_FILM_LIST_CARD_COUNT, FILTER_TYPE, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import AllmoviesListView from '../view/all-movies-list-view.js';
@@ -22,7 +22,7 @@ export default class FilmsListPresenter {
     this._popupContainer = popupContainer;
     this._sortComponent = null;
     this._filmsListComponent = new FilmsListView();
-    this._noFilmComponent = new NoFilmView();
+    this._noFilmComponent = null;
     this._showMoreButtonComponent = null;
     this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
     this._allMoviesContainerComponent = new AllmoviesContainerView();
@@ -37,6 +37,7 @@ export default class FilmsListPresenter {
     this._mostCommentedCardPresenter = new Map();
 
     this._currentSortType = SORT_TYPE.default;
+    this._filterType = FILTER_TYPE.ALL;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
@@ -59,18 +60,17 @@ export default class FilmsListPresenter {
   }
 
   _getFilms() {
-    const filterType = this._filterModel.getFilter();
+    this._filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
-    const filteredFilms = filter[filterType](films);
+    const filteredFilms = filter[this._filterType](films);
 
     switch (this._currentSortType) {
       case SORT_TYPE.byDate:
         return filteredFilms.slice().sort((a, b) => b.filmReleaseDate.filmYear - a.filmReleaseDate.filmYear);
       case SORT_TYPE.byRating:
         return filteredFilms.slice().sort((a, b) => b.filmRating - a.filmRating);
-      case SORT_TYPE.default:
-        return filteredFilms;
     }
+    return filteredFilms;
   }
 
   _handleModeChange() {
@@ -109,8 +109,6 @@ export default class FilmsListPresenter {
         this._clearFilmsList({resetRenderedFilmCardsCount: true, resetSortType: true});
         this._renderAllMoviesList();
         break;
-
-
     }
   }
 
@@ -141,6 +139,7 @@ export default class FilmsListPresenter {
   }
 
   _renderNoFilms() {
+    this._noFilmComponent = new NoFilmView(this._filterType);
     render(this._filmsListComponent, this._noFilmComponent, renderPosition.beforeEnd); //рендер заглушки
   }
 
@@ -219,7 +218,9 @@ export default class FilmsListPresenter {
 
     remove(this._showMoreButtonComponent);
     remove(this._sortComponent);
-    remove(this._noFilmComponent);
+    if (this._noFilmComponent) {
+      remove(this._noFilmComponent);
+    }
 
     if (resetRenderedFilmCardsCount) {
       this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
