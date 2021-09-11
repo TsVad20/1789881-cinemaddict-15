@@ -15,7 +15,7 @@ export default class FilmsModel extends AbstractObserver {
   }
 
   updateFilm(updateType, update) {
-    const index = this._films.findIndex((film) => film.filmid === update.filmid);
+    const index = this._films.findIndex((film) => film.filmId === update.filmId);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting film');
