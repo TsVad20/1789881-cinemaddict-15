@@ -104,8 +104,8 @@ export const UPDATE_TYPE = {
 };
 
 export const FILTER_TYPE = {
-  allMovies: 'allMovies',
-  watchlist: 'watchlist',
-  history: 'history',
-  favorites: 'favorites',
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
 };

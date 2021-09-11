@@ -50,24 +50,24 @@ export default class FilterPresenter {
 
     return [
       {
-        type: FILTER_TYPE.allMovies,
+        type: FILTER_TYPE.ALL,
         name: 'All movies',
         count: 0,
       },
       {
-        type: FILTER_TYPE.watchlist,
+        type: FILTER_TYPE.WATCHLIST,
         name: 'Watchlist',
-        count: filter[FILTER_TYPE.watchlist](films).length,
+        count: filter[FILTER_TYPE.WATCHLIST](films).length,
       },
       {
-        type: FILTER_TYPE.history,
+        type: FILTER_TYPE.HISTORY,
         name: 'History',
-        count: filter[FILTER_TYPE.history](films).length,
+        count: filter[FILTER_TYPE.HISTORY](films).length,
       },
       {
-        type: FILTER_TYPE.favorites,
+        type: FILTER_TYPE.FAVORITES,
         name: 'Favorites',
-        count: filter[FILTER_TYPE.favorites](films).length,
+        count: filter[FILTER_TYPE.FAVORITES](films).length,
       },
     ];
   }

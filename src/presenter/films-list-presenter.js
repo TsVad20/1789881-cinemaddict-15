@@ -2,7 +2,7 @@ import FilmsListView from '../view/films-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import SortListView from '../view/sort-container-view.js';
 import {remove, render, renderPosition} from '../utils/render.js';
-import {EXTRA_FILM_LIST_CARD_COUNT, FILTER_TYPE, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
+import {EXTRA_FILM_LIST_CARD_COUNT, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import AllmoviesListView from '../view/all-movies-list-view.js';
@@ -52,7 +52,6 @@ export default class FilmsListPresenter {
   }
 
   init() {
-    //this._renderSort();
     this._renderFilmsList();
     this._renderTopRatedContainer();
     this._renderMostCommentedContainer();
@@ -62,15 +61,15 @@ export default class FilmsListPresenter {
   _getFilms() {
     const filterType = this._filterModel.getFilter();
     const films = this._filmsModel.getFilms();
-    const filteredfilms = filter[FILTER_TYPE[filterType]](films);
+    const filteredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
       case SORT_TYPE.byDate:
-        return filteredfilms.slice().sort((a, b) => b.filmReleaseDate.filmYear - a.filmReleaseDate.filmYear);
+        return filteredFilms.slice().sort((a, b) => b.filmReleaseDate.filmYear - a.filmReleaseDate.filmYear);
       case SORT_TYPE.byRating:
-        return filteredfilms.slice().sort((a, b) => b.filmRating - a.filmRating);
+        return filteredFilms.slice().sort((a, b) => b.filmRating - a.filmRating);
       case SORT_TYPE.default:
-        return filteredfilms;
+        return filteredFilms;
     }
   }
 
