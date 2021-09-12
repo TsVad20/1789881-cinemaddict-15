@@ -31,11 +31,11 @@ const generatefilmComment = () => ({
   commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
   commentText: generateRandomIndexFromArray(COMMENT_TEXTS),
   commentAuthor: generateRandomIndexFromArray(COMMENT_AUTHORS),
-  commentDate: '2019-05-11T00:00:00.000Z',
+  commentDate: dayjs().add(getRandomInteger(-90, 0), 'day').format(),
 });
 
-const generatefilmComments = (commentsCount) => {
-  const filmCommentsCount = getRandomInteger(0, commentsCount);
+export const generatefilmComments = () => {
+  const filmCommentsCount = getRandomInteger(0, FILM_COMMENTS_MAX_COUNT);
   const filmComments = [];
   for (let i = 0; i < filmCommentsCount; i++) {
     filmComments.push(generatefilmComment());

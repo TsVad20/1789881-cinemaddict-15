@@ -1,8 +1,19 @@
 import FilmsListView from '../view/films-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import SortListView from '../view/sort-container-view.js';
-import {remove, render, renderPosition} from '../utils/render.js';
-import {EXTRA_FILM_LIST_CARD_COUNT, FILTER_TYPE, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
+import {
+  remove,
+  render,
+  renderPosition
+} from '../utils/render.js';
+import {
+  EXTRA_FILM_LIST_CARD_COUNT,
+  FILTER_TYPE,
+  SHOW_MORE_BUTTON_STEP,
+  SORT_TYPE,
+  UPDATE_TYPE,
+  USER_ACTION
+} from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import AllmoviesListView from '../view/all-movies-list-view.js';
@@ -11,7 +22,9 @@ import MostCommentedListView from '../view/most-commented-list-view.js';
 import MostCommentedContainerView from '../view/most-commented-container-view.js';
 import TopRatedListView from '../view/top-rated-list-view.js';
 import TopRatedContainerView from '../view/top-rated-container-view.js';
-import {filter} from '../utils/filter.js';
+import {
+  filter
+} from '../utils/filter.js';
 
 
 export default class FilmsListPresenter {
@@ -106,7 +119,10 @@ export default class FilmsListPresenter {
         this._renderAllMoviesList();
         break;
       case UPDATE_TYPE.major:
-        this._clearFilmsList({resetRenderedFilmCardsCount: true, resetSortType: true});
+        this._clearFilmsList({
+          resetRenderedFilmCardsCount: true,
+          resetSortType: true,
+        });
         this._renderAllMoviesList();
         break;
     }
@@ -118,7 +134,9 @@ export default class FilmsListPresenter {
     }
 
     this._currentSortType = sortType;
-    this._clearFilmsList({resetRenderedFilmCardsCount: true});
+    this._clearFilmsList({
+      resetRenderedFilmCardsCount: true,
+    });
     this._renderAllMoviesList();
   }
 
@@ -154,10 +172,16 @@ export default class FilmsListPresenter {
     this._renderSort();
     render(this._allMoviesContainerComponent, this._allMoviesListComponent, renderPosition.beforeEnd); //рендер Allmovies контейнера для фильмов
 
-    this._renderFilms(this._allMoviesListComponent, films);
+    if (filmsCount === 0) {
+      this._noFilmComponent = new NoFilmView(this._filterType);
+      remove(this._sortComponent);
+      render(this._allMoviesContainerComponent, this._noFilmComponent, renderPosition.beforeEnd);
+    } else {
+      this._renderFilms(this._allMoviesListComponent, films);
 
-    if (filmsCount > SHOW_MORE_BUTTON_STEP) {
-      this._renderShowMoreButton();
+      if (filmsCount > SHOW_MORE_BUTTON_STEP) {
+        this._renderShowMoreButton();
+      }
     }
   }
 
@@ -211,7 +235,10 @@ export default class FilmsListPresenter {
 
   }
 
-  _clearFilmsList({resetRenderedFilmCardsCount = false, resetSortType = false} = {}) {
+  _clearFilmsList({
+    resetRenderedFilmCardsCount = false,
+    resetSortType = false,
+  } = {}) {
     const filmsCount = this._getFilms().length;
     this._filmCardPresenter.forEach((presenter) => presenter.destroy());
     this._filmCardPresenter.clear();
@@ -266,4 +293,3 @@ export default class FilmsListPresenter {
     mostCommentedFilms.slice(0, EXTRA_FILM_LIST_CARD_COUNT).forEach((filmCard) => this._renderFilm(container, filmCard));
   }
 }
-
