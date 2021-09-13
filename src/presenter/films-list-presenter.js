@@ -25,12 +25,14 @@ import TopRatedContainerView from '../view/top-rated-container-view.js';
 import {
   filter
 } from '../utils/filter.js';
+import CommentsModel from '../model/comments-model.js';
 
 
 export default class FilmsListPresenter {
   constructor(filmsContainer, popupContainer, filmsModel, filterModel) {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._commentsModel = new CommentsModel(this._filmsModel.getFilms());
     this._filmsContainer = filmsContainer;
     this._popupContainer = popupContainer;
     this._sortComponent = null;
@@ -63,6 +65,7 @@ export default class FilmsListPresenter {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -93,10 +96,16 @@ export default class FilmsListPresenter {
     document.body.classList.add('hide-overflow');
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, innerUpdate = null) {
     switch (actionType) {
       case USER_ACTION.updateFilm:
         this._filmsModel.updateFilm(updateType, update);
+        break;
+      case USER_ACTION.addComment:
+        this._commentsModel.addComment(updateType, update, innerUpdate);
+        break;
+      case USER_ACTION.deleteComment:
+        this._commentsModel.deleteComment(updateType, update, innerUpdate);
         break;
     }
   }
@@ -104,6 +113,10 @@ export default class FilmsListPresenter {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UPDATE_TYPE.patch:
+        if (this._filterType !== FILTER_TYPE.ALL) {
+          this._clearFilmsList({resetRenderedFilmCardsCount: true});
+          this._renderAllMoviesList();
+        }
         if (this._filmCardPresenter.has(data.filmId)) {
           this._filmCardPresenter.get(data.filmId).init(data);
         }

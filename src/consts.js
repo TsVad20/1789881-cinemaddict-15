@@ -93,8 +93,8 @@ export const SORT_TYPE = {
 
 export const USER_ACTION = {
   updateFilm: 'updateFilm',
-  addFilm: 'addFilm',
-  deleteFilm: 'deleteFilm',
+  addComment: 'addComment',
+  deleteComment: 'deleteComment',
 };
 
 export const UPDATE_TYPE = {
