@@ -8,6 +8,7 @@ import {
   replace,
   showPopup
 } from '../utils/render.js';
+import {USER_ACTION, UPDATE_TYPE} from '../consts.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -34,6 +35,10 @@ export default class FilmCardPresenter {
     this._handleAddToWatchlistClick = this._handleAddToWatchlistClick.bind(this);
     this._handleAddToFavoritesClick = this._handleAddToFavoritesClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
+
+    this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
+    this._handleAddCommentClick = this._handleAddCommentClick.bind(this);
+
   }
 
   init(film) {
@@ -53,6 +58,8 @@ export default class FilmCardPresenter {
     this._popupComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
     this._popupComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
     this._popupComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
+    this._popupComponent.setDeleteClickHandler(this._handleDeleteCommentClick);
+    this._popupComponent.setAddCommentHandler(this._handleAddCommentClick);
 
     if (prevFilmCardComponent === null || prevPopupComponent === null) {
       render(this._filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
@@ -113,9 +120,19 @@ export default class FilmCardPresenter {
     this._hidePopup();
   }
 
+  _handleAddCommentClick(comment) {
+    this._changeData(USER_ACTION.addComment, UPDATE_TYPE.patch, this._film, comment);
+  }
+
+  _handleDeleteCommentClick(comment) {
+    this._changeData(USER_ACTION.deleteComment, UPDATE_TYPE.patch, this._film, comment);
+  }
+
+
   _handleAddToWatchlistClick() {
     this._changeData(
-
+      USER_ACTION.updateFilm,
+      UPDATE_TYPE.patch,
       Object.assign(
 
         {},
@@ -143,7 +160,8 @@ export default class FilmCardPresenter {
 
   _handleAddToFavoritesClick() {
     this._changeData(
-
+      USER_ACTION.updateFilm,
+      UPDATE_TYPE.patch,
       Object.assign(
 
         {},
@@ -170,7 +188,8 @@ export default class FilmCardPresenter {
 
   _handleAlreadyWatchedClick() {
     this._changeData(
-
+      USER_ACTION.updateFilm,
+      UPDATE_TYPE.patch,
       Object.assign(
 
         {},

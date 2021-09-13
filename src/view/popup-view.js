@@ -1,5 +1,13 @@
+import dayjs from 'dayjs';
+import he from 'he';
 import { COMMENT_EMOJIES } from '../consts.js';
 import SmartView from './smart.js';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { nanoid } from 'nanoid';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const createCommentsTemplate = (comments) =>
   comments.map((item) => `<li class="film-details__comment">
@@ -7,11 +15,11 @@ const createCommentsTemplate = (comments) =>
     <img src="${item.commentEmoji}" width="55" height="55" alt="${item.commentEmoji}">
   </span>
   <div>
-    <p class="film-details__comment-text">${item.commentText}</p>
+    <p class="film-details__comment-text">${(item.commentText)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${item.commentAuthor}</span>
-      <span class="film-details__comment-day">${item.commentDate}</span>
-      <button class="film-details__comment-delete">Delete</button>
+      <span class="film-details__comment-day">${dayjs(item.commentDate).fromNow()}</span>
+      <button id = "${item.commentId}"class="film-details__comment-delete">Delete</button>
     </p>
   </div>
 </li>`);
@@ -100,11 +108,11 @@ export const createPopupTemplate = (data) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${filmReleaseDate.filmDay} ${filmReleaseDate.filmMonth} ${filmReleaseDate.filmYear}</td>
+            <td class="film-details__cell">${dayjs(filmReleaseDate).format('DD MMMM YYYY')}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${filmDuration}</td>
+            <td class="film-details__cell">${dayjs.duration(filmDuration, 'minutes').format('H[h] mm[m]')}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -132,7 +140,7 @@ export const createPopupTemplate = (data) => {
         <div class="film-details__add-emoji-label">
         ${createNewCommentTemplate(newComment.emoji, newComment.isEmoji)}</div>
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newComment.commentDescription}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(newComment.commentText)}</textarea>
         </label>
         ${createEmojiesTemplate(newComment.emoji)}
       </div>
@@ -150,6 +158,8 @@ export default class PopupView extends SmartView {
     this._clickAddToWatchlistHandler = this._clickAddToWatchlistHandler.bind(this);
     this._clickAlreadyWatchedHandler = this._clickAlreadyWatchedHandler.bind(this);
     this._clickAddToFavoritesHandler = this._clickAddToFavoritesHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
 
     this._emojiToggleHandler = this._emojiToggleHandler.bind(this);
     this._commentDescriptionInputHandler = this._commentDescriptionInputHandler.bind(this);
@@ -159,10 +169,9 @@ export default class PopupView extends SmartView {
   static parseFilmToData(film) {
     return Object.assign({}, film, {
       newComment: {
-        commentDescription: '',
+        commentText:'',
       },
     });
-
   }
 
   reset(film) {
@@ -213,6 +222,29 @@ export default class PopupView extends SmartView {
     this.getElement().querySelector('#favorite').addEventListener('click', this._clickAddToFavoritesHandler);
   }
 
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.matches('button')){
+      const index = this._data.filmComments.findIndex((comment) => comment.commentId === evt.target.id);
+      this._callback.deleteClick(this._data.filmComments[index]);
+    }
+  }
+
+  _addCommentHandler(evt) {
+    evt.preventDefault();
+    this._commentDescriptionInputHandler(evt);
+    this._emojiToggleHandler(evt);
+    const emoji = `./images/emoji/${this._data.newComment.emoji}.png`;
+    const commentToAdd = {
+      commentId: this._data.newComment.commentId,
+      commentEmoji: emoji,
+      commentText: this._data.newComment.commentText,
+      commentAuthor: 'Vadim',
+      commentdate: this._data.newComment.commentdate,
+    };
+    this._callback.addComment(commentToAdd);
+  }
+
   _emojiToggleHandler(evt) {
     if (evt.target.tagName !== 'INPUT') {
       return;
@@ -232,7 +264,10 @@ export default class PopupView extends SmartView {
     evt.preventDefault();
     this.updateData({
       newComment: Object.assign({}, this._data.newComment, {
-        commentDescription: evt.target.value,
+        commentId: nanoid(),
+        commentText: he.encode(evt.target.value),
+        commentAuthor: 'Vadim',
+        commentdate: dayjs().fromNow(),
       }),
     }, true);
   }
@@ -243,6 +278,8 @@ export default class PopupView extends SmartView {
     this.setAddToWatchlistClickHandler(this._callback.onAddToWatchlistClick);
     this.setAlreadyWatchedHandler(this._callback.onAlreadyWatchedClick);
     this.setAddToFavoritesHandler(this._callback.onAlreadyWatchedClick);
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setAddCommentHandler(this._callback.addComment);
   }
 
   _setInnerHandlers() {
@@ -253,6 +290,16 @@ export default class PopupView extends SmartView {
     this.getElement()
       .querySelector('.film-details__comment-input')
       .addEventListener('change', this._commentDescriptionInputHandler);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._deleteClickHandler);
+  }
+
+  setAddCommentHandler(callback) {
+    this._callback.addComment = callback;
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('change', this._addCommentHandler);
   }
 
 }

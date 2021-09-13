@@ -24,26 +24,18 @@ dayjs.extend(relativeTime);
 
 const generateFilmRating = () => getRandomFloat(0, 10);
 
-const generateFilmReleaseDate = () => {
-  const filmReleaseDate = {
-    filmYear: `${dayjs().year(getRandomInteger(1950,2021)).format('YYYY')}`,
-    filmMonth: `${dayjs().month(getRandomInteger(0,11)).format('MMMM')}`,
-    filmDay: `${dayjs().day(getRandomInteger(1, 365 / 12)).format('DD')}`,
-  };
-  return filmReleaseDate;
-};
-
-const generateFilmDuration = () => `${dayjs.duration(getRandomInteger(120,240), 'minutes').format('H[h] : mm[m]')}`;
+const generateFilmDuration = () => getRandomInteger(120,240);
 
 const generatefilmComment = () => ({
+  commentId: nanoid(),
   commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
   commentText: generateRandomIndexFromArray(COMMENT_TEXTS),
   commentAuthor: generateRandomIndexFromArray(COMMENT_AUTHORS),
-  commentDate: dayjs(dayjs().subtract(getRandomInteger(0,10000), 'minutes')).fromNow(),
+  commentDate: dayjs().add(getRandomInteger(-90, 0), 'day').format(),
 });
 
-const generatefilmComments = (commentsCount) => {
-  const filmCommentsCount = getRandomInteger(0, commentsCount);
+export const generatefilmComments = () => {
+  const filmCommentsCount = getRandomInteger(0, FILM_COMMENTS_MAX_COUNT);
   const filmComments = [];
   for (let i = 0; i < filmCommentsCount; i++) {
     filmComments.push(generatefilmComment());
@@ -74,7 +66,7 @@ export const generateFilmCard = () => ({
   filmDirector: generateRandomIndexFromArray(FILM_DIRECTORS),
   filmWriters: generateRandomIndexFromArray(FILM_WRITERS),
   filmActors: generateArrayOfRandomLength(FILM_ACTORS),
-  filmReleaseDate: generateFilmReleaseDate(),
+  filmReleaseDate: '2019-05-11T00:00:00.000Z',
   filmCountry: generateRandomIndexFromArray(FILM_COUNTRIES),
   filmGenres: generateArrayOfRandomLength(FILM_GENRES),
   filmAge: generateRandomIndexFromArray(FILM_AGES),

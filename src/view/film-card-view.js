@@ -1,5 +1,6 @@
 import AbstractView from './abstract.js';
 import { FILM_DESCRIPTION_MAX_LENGTH } from '../consts.js';
+import dayjs from 'dayjs';
 
 const createFilmCardTemplate = (film) =>{
   const {filmPoster, filmTitle, filmDescription, filmRating, filmReleaseDate, filmDuration, filmGenres, filmComments, usersDetails} = film;
@@ -20,8 +21,8 @@ const createFilmCardTemplate = (film) =>{
     <h3 class="film-card__title">${filmTitle}</h3>
     <p class="film-card__rating">${filmRating}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${filmReleaseDate.filmYear}</span>
-      <span class="film-card__duration">${filmDuration}</span>
+      <span class="film-card__year">${dayjs(filmReleaseDate).format('YYYY')}</span>
+      <span class="film-card__duration">${dayjs.duration(filmDuration, 'minutes').format('H[h] : mm[m]')}</span>
       <span class="film-card__genre">${filmGenres.slice(0,1)}</span>
     </p>
     <img src="./images/posters/${filmPoster}" alt="./images/posters/${filmPoster}" class="film-card__poster">
