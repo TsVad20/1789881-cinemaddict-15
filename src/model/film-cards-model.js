@@ -53,4 +53,31 @@ export default class FilmsModel extends AbstractObserver {
 
     this._notify(updateType);
   }
+
+  static adaptToClient(film) {
+    const adaptedFilm = {
+      filmId: film.id,
+      filmPoster: `images/posters/${film.film_info.poster}`,
+      filmTitle: film.film_info.title,
+      filmDescription: film.film_info.description,
+      filmRating: film.film_info.total_rating,
+      filmDuration: film.film_info.runtime,
+      filmDirector: film.film_info.director,
+      filmWriters: film.film_info.writers,
+      filmActors: film.film_info.actors,
+      filmReleaseDate: film.film_info.release.date,
+      filmCountry: film.film_info.release.release_country,
+      filmGenres: film.film_info.genre,
+      filmAge: film.film_info.age_rating,
+      filmComments: film.comments,
+      usersDetails: {
+        addedToWatchlist: film.user_details.watchlist,
+        isArchive: film.user_details.already_watched,
+        watchingDate: film.user_details.watching_date,
+        isFavorite: film.user_details.favorite,
+      },
+    };
+
+    return adaptedFilm;
+  }
 }

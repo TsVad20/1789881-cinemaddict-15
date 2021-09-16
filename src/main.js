@@ -1,5 +1,4 @@
-import {FILM_CARD_COUNT, FILTER_TYPE} from './consts.js';
-import {generateFilmCard} from './mock/film-card-mock.js';
+import {DATA_TYPE, FILTER_TYPE} from './consts.js';
 import HeaderContainerView from './view/header-container-view.js';
 import FooterContainerView from './view/footer-container-view.js';
 import {remove, render, renderPosition} from './utils/render.js';
@@ -9,12 +8,23 @@ import MainContainerView from './view/main-container-view.js';
 import FilmsModel from './model/film-cards-model.js';
 import FilterModel from './model/filter-model.js';
 import StatisticsView from './view/stats-view.js';
+import Api from './api.js';
 
-const filmCards = new Array(FILM_CARD_COUNT).fill().map(generateFilmCard);
+const AUTHORIZATION = 'Basic hS3sd4dfSwcl1sa3j';
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
+
+//const filmCards = new Array(FILM_CARD_COUNT).fill().map(generateFilmCard);
+
+
+const api = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.MOVIES);
 
 const filmsModel = new FilmsModel();
 
-filmsModel.setFilms(filmCards);
+api.getData().then((films) => {
+  console.log(films);
+  filmsModel.setFilms(films);
+});
+
 
 const filterModel = new FilterModel();
 
@@ -22,7 +32,7 @@ const body = document.querySelector('body');
 
 const headerContainerComponent = new HeaderContainerView(filmsModel.getFilms());
 const mainContainerComponent = new MainContainerView();
-const footerContainerComponent = new FooterContainerView(filmCards);
+const footerContainerComponent = new FooterContainerView(filmsModel.getFilms());
 
 const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), footerContainerComponent.getElement(), filmsModel, filterModel);
 

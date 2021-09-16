@@ -154,3 +154,8 @@ export const MODE = {
   EDITING: 'EDITING',
   INIT: 'INIT',
 };
+
+export const DATA_TYPE = {
+  MOVIES: 'movies',
+  COMMENTS: 'comments',
+};
