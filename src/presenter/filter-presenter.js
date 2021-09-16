@@ -45,7 +45,7 @@ export default class FilterPresenter {
       return;
     }
 
-    this._filterModel.setFilter(UPDATE_TYPE.major, filterType);
+    this._filterModel.setFilter(UPDATE_TYPE.minor, filterType);
   }
 
   _getFilters() {

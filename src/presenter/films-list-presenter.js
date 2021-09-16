@@ -137,9 +137,7 @@ export default class FilmsListPresenter {
     }
 
     this._currentSortType = sortType;
-    this._clearFilmsList({
-      resetRenderedFilmCardsCount: true,
-    });
+    this._clearFilmsList({resetRenderedFilmCardsCount: true});
     this._renderAllMoviesList();
   }
 
@@ -262,6 +260,16 @@ export default class FilmsListPresenter {
     document.body.classList.remove('hide-overflow');
   }
 
+  _clearListTopRaited() {
+    this._topRatedCardPresenter.forEach((presenter) => presenter.destroy());
+    remove(this._topRatedContainerComponent);
+  }
+
+  _clearListMostComment() {
+    this._mostCommentedCardPresenter.forEach((presenter) => presenter.destroy());
+    remove(this._mostCommentedContainerComponent);
+  }
+
   _renderFilm(container, film) {
     if (container === this._allMoviesListComponent) {
       const filmCardPresenter = new FilmCardPresenter(container, this._popupContainer, this._handleViewAction, this._handleModeChange);
@@ -297,17 +305,10 @@ export default class FilmsListPresenter {
   destroy() {
     this._clearFilmsList({resetRenderedMovieCount: true, resetSortType: true});
     this._mode = MODE.DEFAULT;
-    this._topRatedCardPresenter.forEach((presenter) => presenter.destroy());
-    this._mostCommentedCardPresenter.forEach((presenter) => presenter.destroy());
-
-    remove(this._topRatedContainerComponent);
-    remove(this._mostCommentedContainerComponent);
-    //this._clearListMostComment();
-    //this._clearListTopRaited();
-    //remove(this._movieBoardComponent);
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._commentsModel.addObserver(this._handleModelEvent);
+    this._clearListTopRaited();
+    this._clearListMostComment();
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._commentsModel.removeObserver(this._handleModelEvent);
   }
-
 }
