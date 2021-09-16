@@ -8,12 +8,7 @@ import {
   replace,
   showPopup
 } from '../utils/render.js';
-import {USER_ACTION, UPDATE_TYPE} from '../consts.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+import {USER_ACTION, UPDATE_TYPE, MODE} from '../consts.js';
 
 export default class FilmCardPresenter {
 
@@ -24,7 +19,7 @@ export default class FilmCardPresenter {
     this._filmCardComponent = null;
     this._popupComponent = null;
 
-    this._mode = Mode.DEFAULT;
+    this._mode = MODE.DEFAULT;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -68,7 +63,7 @@ export default class FilmCardPresenter {
 
     replace(this._filmCardComponent, prevFilmCardComponent);
 
-    if (this._mode === Mode.EDITING) {
+    if (this._mode === MODE.EDITING) {
       replace(this._popupComponent, prevPopupComponent);
     }
 
@@ -82,7 +77,7 @@ export default class FilmCardPresenter {
   }
 
   resetPopup() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._mode !== MODE.DEFAULT) {
       this._popupComponent.reset(this._film);
       this._hidePopup();
     }
@@ -99,18 +94,18 @@ export default class FilmCardPresenter {
   _hidePopup() {
     hidePopup(this._popupContainer, this._popupComponent);
     document.removeEventListener('keydown', this._escKeydownHandler);
-    this._mode = Mode.DEFAULT;
+    this._mode = MODE.DEFAULT;
   }
 
   _showPopup() {
     showPopup(this._popupContainer, this._popupComponent);
     document.addEventListener('keydown', this._escKeydownHandler);
     this._changeMode();
-    this._mode = Mode.EDITING;
+    this._mode = MODE.EDITING;
   }
 
   _handleFilmCardClick() {
-    if (this._mode !== Mode.EDITING) {
+    if (this._mode !== MODE.EDITING) {
       this._showPopup();
     }
   }

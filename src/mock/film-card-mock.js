@@ -26,6 +26,8 @@ const generateFilmRating = () => getRandomFloat(0, 10);
 
 const generateFilmDuration = () => getRandomInteger(120,240);
 
+const generateRandomDate = (start, end) => dayjs(new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))).toJSON();// взял из stackoverflow подогнал по dayjs
+
 const generatefilmComment = () => ({
   commentId: nanoid(),
   commentEmoji: `./images/emoji/${generateRandomIndexFromArray(COMMENT_EMOJIES)}.png`,
@@ -48,10 +50,12 @@ const generateUsersDetails = () => {
   return addedToWatchListMarker ? {
     addedToWatchlist: true,
     isArchive: false,
+    watchingDate: generateRandomDate(new Date(2019, 0, 1), new Date()),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   } : {
     addedToWatchlist: false,
     isArchive: true,
+    watchingDate: generateRandomDate(new Date(2019, 0, 1), new Date()),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };
@@ -66,7 +70,7 @@ export const generateFilmCard = () => ({
   filmDirector: generateRandomIndexFromArray(FILM_DIRECTORS),
   filmWriters: generateRandomIndexFromArray(FILM_WRITERS),
   filmActors: generateArrayOfRandomLength(FILM_ACTORS),
-  filmReleaseDate: '2019-05-11T00:00:00.000Z',
+  filmReleaseDate: generateRandomDate(new Date(1980, 0, 1), new Date()),
   filmCountry: generateRandomIndexFromArray(FILM_COUNTRIES),
   filmGenres: generateArrayOfRandomLength(FILM_GENRES),
   filmAge: generateRandomIndexFromArray(FILM_AGES),
