@@ -1,13 +1,14 @@
 import MenuContainerView from '../view/menu-container-view.js';
-import {FILTER_TYPE,  UPDATE_TYPE} from '../consts.js';
+import {FILTER_TYPE, UPDATE_TYPE} from '../consts.js';
 import {render, remove, replace, renderPosition} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
 
 export default class FilterPresenter {
-  constructor(filterContainer, filterModel, filmsModel) {
+  constructor(filterContainer, filterModel, filmsModel, handleSiteMenuClick) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._handleSiteMenuClick = handleSiteMenuClick;
 
     this._filterComponent = null;
 
@@ -24,6 +25,7 @@ export default class FilterPresenter {
 
     this._filterComponent = new MenuContainerView(filters, this._filterModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setShowStatsHandler(this._handleSiteMenuClick);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, renderPosition.afterBegin);
@@ -39,7 +41,7 @@ export default class FilterPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._filterModel.getFilter() === filterType){
       return;
     }
 

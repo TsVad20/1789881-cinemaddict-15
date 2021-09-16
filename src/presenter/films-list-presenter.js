@@ -1,19 +1,8 @@
 import FilmsListView from '../view/films-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import SortListView from '../view/sort-container-view.js';
-import {
-  remove,
-  render,
-  renderPosition
-} from '../utils/render.js';
-import {
-  EXTRA_FILM_LIST_CARD_COUNT,
-  FILTER_TYPE,
-  SHOW_MORE_BUTTON_STEP,
-  SORT_TYPE,
-  UPDATE_TYPE,
-  USER_ACTION
-} from '../consts.js';
+import {remove, render, renderPosition} from '../utils/render.js';
+import {EXTRA_FILM_LIST_CARD_COUNT, FILTER_TYPE, MODE, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import AllmoviesListView from '../view/all-movies-list-view.js';
@@ -22,11 +11,8 @@ import MostCommentedListView from '../view/most-commented-list-view.js';
 import MostCommentedContainerView from '../view/most-commented-container-view.js';
 import TopRatedListView from '../view/top-rated-list-view.js';
 import TopRatedContainerView from '../view/top-rated-container-view.js';
-import {
-  filter
-} from '../utils/filter.js';
+import {filter} from '../utils/filter.js';
 import CommentsModel from '../model/comments-model.js';
-
 
 export default class FilmsListPresenter {
   constructor(filmsContainer, popupContainer, filmsModel, filterModel) {
@@ -53,6 +39,7 @@ export default class FilmsListPresenter {
 
     this._currentSortType = SORT_TYPE.default;
     this._filterType = FILTER_TYPE.ALL;
+    this._mode = MODE.DEFAULT;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
@@ -62,17 +49,20 @@ export default class FilmsListPresenter {
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
+    if (this._mode !== MODE.DEFAULT) {
+      return;
+    }
     this._renderFilmsList();
     this._renderTopRatedContainer();
     this._renderMostCommentedContainer();
 
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
+    this._mode = MODE.INIT;
   }
 
   _getFilms() {
@@ -248,16 +238,14 @@ export default class FilmsListPresenter {
 
   }
 
-  _clearFilmsList({
-    resetRenderedFilmCardsCount = false,
-    resetSortType = false,
-  } = {}) {
+  _clearFilmsList({resetRenderedFilmCardsCount = false, resetSortType = false} = {}) {
     const filmsCount = this._getFilms().length;
     this._filmCardPresenter.forEach((presenter) => presenter.destroy());
     this._filmCardPresenter.clear();
 
     remove(this._showMoreButtonComponent);
     remove(this._sortComponent);
+
     if (this._noFilmComponent) {
       remove(this._noFilmComponent);
     }
@@ -305,4 +293,21 @@ export default class FilmsListPresenter {
     const mostCommentedFilms = films.slice().sort((a, b) => b.filmComments.length - a.filmComments.length);
     mostCommentedFilms.slice(0, EXTRA_FILM_LIST_CARD_COUNT).forEach((filmCard) => this._renderFilm(container, filmCard));
   }
+
+  destroy() {
+    this._clearFilmsList({resetRenderedMovieCount: true, resetSortType: true});
+    this._mode = MODE.DEFAULT;
+    this._topRatedCardPresenter.forEach((presenter) => presenter.destroy());
+    this._mostCommentedCardPresenter.forEach((presenter) => presenter.destroy());
+
+    remove(this._topRatedContainerComponent);
+    remove(this._mostCommentedContainerComponent);
+    //this._clearListMostComment();
+    //this._clearListTopRaited();
+    //remove(this._movieBoardComponent);
+    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
+  }
+
 }
