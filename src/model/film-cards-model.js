@@ -6,8 +6,9 @@ export default class FilmsModel extends AbstractObserver {
     this._films = [];
   }
 
-  setFilms(films) {
+  setFilms(updateType,films) {
     this._films = films.slice();
+    this._notify(updateType);
   }
 
   getFilms() {
@@ -57,7 +58,7 @@ export default class FilmsModel extends AbstractObserver {
   static adaptToClient(film) {
     const adaptedFilm = {
       filmId: film.id,
-      filmPoster: `images/posters/${film.film_info.poster}`,
+      filmPoster: film.film_info.poster,
       filmTitle: film.film_info.title,
       filmDescription: film.film_info.description,
       filmRating: film.film_info.total_rating,
@@ -75,6 +76,37 @@ export default class FilmsModel extends AbstractObserver {
         isArchive: film.user_details.already_watched,
         watchingDate: film.user_details.watching_date,
         isFavorite: film.user_details.favorite,
+      },
+    };
+    return adaptedFilm;
+  }
+
+  static adaptToServer(film) {
+    const adaptedFilm = {
+      'id': film.filmId,
+      'comments': film.filmComments,
+      'film_info': {
+        'title': film.filmTitle,
+        'alternative_title': film.filmTitle,
+        'total_rating': film.filmRating,
+        'poster': film.filmPoster,
+        'age_rating': film.filmAge,
+        'director': film.filmDirector,
+        'writers': film.filmWriters,
+        'actors': film.filmActors,
+        'release': {
+          'date': film.filmReleaseDate,
+          'release_country': film.filmCountry,
+        },
+        'runtime': film.filmDuration,
+        'genre': film.filmGenres,
+        'description': film.filmDescription,
+      },
+      'user_details': {
+        'watchlist': film.usersDetails.addedToWatchlist,
+        'already_watched': film.usersDetails.isArchive,
+        'watching_date': film.usersDetails.watchingDate,
+        'favorite': film.usersDetails.isFavorite,
       },
     };
 

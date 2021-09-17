@@ -101,6 +101,7 @@ export const UPDATE_TYPE = {
   patch: 'patch',
   minor: 'minor',
   major: 'major',
+  init:  'init',
 };
 
 export const FILTER_TYPE = {

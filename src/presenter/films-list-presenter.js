@@ -13,9 +13,10 @@ import TopRatedListView from '../view/top-rated-list-view.js';
 import TopRatedContainerView from '../view/top-rated-container-view.js';
 import {filter} from '../utils/filter.js';
 import CommentsModel from '../model/comments-model.js';
+import LoadingView from '../view/loading.js';
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer, popupContainer, filmsModel, filterModel) {
+  constructor(filmsContainer, popupContainer, filmsModel, filterModel, api) {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentsModel = new CommentsModel(this._filmsModel.getFilms());
@@ -32,6 +33,8 @@ export default class FilmsListPresenter {
     this._topRatedListComponent = new TopRatedListView();
     this._mostCommentedContainerComponent = new MostCommentedContainerView();
     this._mostCommentedListComponent = new MostCommentedListView;
+    this._loadingComponent = new LoadingView();
+    this._api = api;
 
     this._filmCardPresenter = new Map();
     this._topRatedCardPresenter = new Map();
@@ -40,6 +43,7 @@ export default class FilmsListPresenter {
     this._currentSortType = SORT_TYPE.default;
     this._filterType = FILTER_TYPE.ALL;
     this._mode = MODE.DEFAULT;
+    this._isLoading = true;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
@@ -89,7 +93,9 @@ export default class FilmsListPresenter {
   _handleViewAction(actionType, updateType, update, innerUpdate = null) {
     switch (actionType) {
       case USER_ACTION.updateFilm:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.updateTask(update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
         break;
       case USER_ACTION.addComment:
         this._commentsModel.addComment(updateType, update, innerUpdate);
@@ -128,6 +134,11 @@ export default class FilmsListPresenter {
         });
         this._renderAllMoviesList();
         break;
+      case UPDATE_TYPE.init:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderAllMoviesList();
+        break;
     }
   }
 
@@ -157,6 +168,10 @@ export default class FilmsListPresenter {
     (filmsCount === 0) ? this._renderNoFilms(): this._renderAllMoviesContainer();
   }
 
+  _renderLoading() {
+    render(this._filmsListComponent, this._loadingComponent, renderPosition.afterBegin);
+  }
+
   _renderNoFilms() {
     this._noFilmComponent = new NoFilmView(this._filterType);
     render(this._filmsListComponent, this._noFilmComponent, renderPosition.beforeEnd); //рендер заглушки
@@ -168,6 +183,10 @@ export default class FilmsListPresenter {
   }
 
   _renderAllMoviesList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     const filmsCount = this._getFilms().length;
     const films = this._getFilms().slice(0, Math.min(filmsCount, SHOW_MORE_BUTTON_STEP));
     this._renderSort();
@@ -242,6 +261,7 @@ export default class FilmsListPresenter {
     this._filmCardPresenter.clear();
 
     remove(this._showMoreButtonComponent);
+    remove(this._loadingComponent);
     remove(this._sortComponent);
 
     if (this._noFilmComponent) {

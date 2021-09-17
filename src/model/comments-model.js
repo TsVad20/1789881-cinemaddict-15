@@ -37,4 +37,24 @@ export default class CommentsModel extends AbstractObserver {
     this._films[index] = update;
     this._notify(updateType, update);
   }
+
+  static adaptToClient(comment) {
+    const adaptedComment = {
+      commentId: comment.id,
+      commentAuthor: comment.author,
+      commentEmoji: comment.emotion,
+      commentDate: comment.date,
+      commentText: comment.comment,
+    };
+    return adaptedComment;
+  }
+
+  static adaptToServer(comment) {
+    const adaptedComment = {
+      comment: comment.commentText,
+      emotion: comment.commentEmoji,
+    };
+    return adaptedComment;
+  }
+
 }
