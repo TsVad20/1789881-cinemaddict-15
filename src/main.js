@@ -1,17 +1,14 @@
-import {DATA_TYPE, FILTER_TYPE, UPDATE_TYPE} from './consts.js';
-import HeaderContainerView from './view/header-container-view.js';
-import FooterContainerView from './view/footer-container-view.js';
+import {AUTHORIZATION, DATA_TYPE, END_POINT, FILTER_TYPE, UPDATE_TYPE} from './consts.js';
 import {remove, render, renderPosition} from './utils/render.js';
 import FilmsListPresenter from './presenter/films-list-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import MainContainerView from './view/main-container-view.js';
 import FilmsModel from './model/film-cards-model.js';
 import FilterModel from './model/filter-model.js';
 import StatisticsView from './view/stats-view.js';
 import Api from './api.js';
-
-const AUTHORIZATION = 'Basic hS3sd4dfSwcl1sa3j';
-const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
+import FooterView from './view/footer-view.js';
+import MainView from './view/main-view.js';
+import HeaderView from './view/header-view.js';
 
 const api = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.MOVIES);
 
@@ -19,13 +16,12 @@ const filmsModel = new FilmsModel();
 
 const filterModel = new FilterModel();
 
-const body = document.querySelector('body');
+const header = document.querySelector('header');
+const footer = document.querySelector('footer');
 
-const headerContainerComponent = new HeaderContainerView(filmsModel.getFilms());
-const mainContainerComponent = new MainContainerView();
-//const footerContainerComponent = new FooterContainerView(filmsModel.getFilms());
+const mainContainerComponent = new MainView();
 
-const filmsListPresenter = new FilmsListPresenter(mainContainerComponent.getElement(), new FooterContainerView(filmsModel.getFilms()).getElement(), filmsModel, filterModel, api);
+const filmsListPresenter = new FilmsListPresenter(mainContainerComponent, footer, filmsModel, filterModel, api);
 
 let statisticsComponent = null;
 
@@ -49,17 +45,20 @@ const handleSiteMenuClick = (target) => {
 
 const filterPresenter = new FilterPresenter(mainContainerComponent.getElement(), filterModel, filmsModel, handleSiteMenuClick);
 
-render(body, headerContainerComponent, renderPosition.afterBegin); //секция header
-render(headerContainerComponent, mainContainerComponent, renderPosition.afterEnd); //секция main
+render(header, mainContainerComponent, renderPosition.afterEnd); //секция main
 
+
+filmsListPresenter.init();
 
 api.getData()
   .then((films) => {
     filmsModel.setFilms(UPDATE_TYPE.init,films);
     filterPresenter.init();
-    filmsListPresenter.init();
-    render(mainContainerComponent, new FooterContainerView(filmsModel.getFilms()), renderPosition.afterEnd); //секция footer
+    render(header, new HeaderView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция header
+    render(footer, new FooterView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция footer
   })
   .catch(() =>{
     filmsModel.setFilms(UPDATE_TYPE.init,[]);
+    render(header, new HeaderView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция header
+    render(footer, new FooterView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция footer
   }  );

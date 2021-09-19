@@ -3,7 +3,7 @@ import AbstractView from './abstract.js';
 export const createMainBoardTemplate = () => (`<main class="main">
 </main>`);
 
-export default class MainBoardView extends AbstractView {
+export default class MainView extends AbstractView {
 
   getTemplate() {
     return createMainBoardTemplate();

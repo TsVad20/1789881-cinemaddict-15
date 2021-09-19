@@ -160,3 +160,6 @@ export const DATA_TYPE = {
   MOVIES: 'movies',
   COMMENTS: 'comments',
 };
+
+export const AUTHORIZATION = 'Basic hS3sd4dfSwcl1sa3j';
+export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';

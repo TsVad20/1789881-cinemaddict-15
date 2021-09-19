@@ -27,7 +27,7 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  updateTask(data) {
+  updateData(data) {
     return this._load({
       url: `${this._dataType}/${data.id}`,
       method: Method.PUT,

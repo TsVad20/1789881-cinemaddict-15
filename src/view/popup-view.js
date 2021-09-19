@@ -79,7 +79,7 @@ export const createPopupTemplate = (data) => {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="./images/posters/${filmPoster}" alt="./images/posters/${filmPoster}">
+        <img class="film-details__poster-img" src="${filmPoster}" alt="${filmPoster}">
         <p class="film-details__age">${filmAge}</p>
       </div>
       <div class="film-details__info">

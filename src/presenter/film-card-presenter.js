@@ -1,13 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
-import {
-  hidePopup,
-  remove,
-  render,
-  renderPosition,
-  replace,
-  showPopup
-} from '../utils/render.js';
+import {remove, render, renderPosition, replace  } from '../utils/render.js';
 import {USER_ACTION, UPDATE_TYPE, MODE} from '../consts.js';
 
 export default class FilmCardPresenter {
@@ -92,13 +85,15 @@ export default class FilmCardPresenter {
   }
 
   _hidePopup() {
-    hidePopup(this._popupContainer, this._popupComponent);
+    remove(this._popupComponent);
+    document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this._escKeydownHandler);
     this._mode = MODE.DEFAULT;
   }
 
   _showPopup() {
-    showPopup(this._popupContainer, this._popupComponent);
+    render(this._popupContainer, this._popupComponent, renderPosition.afterEnd);
+    document.body.classList.add('hide-overflow');
     document.addEventListener('keydown', this._escKeydownHandler);
     this._changeMode();
     this._mode = MODE.EDITING;
@@ -122,7 +117,6 @@ export default class FilmCardPresenter {
   _handleDeleteCommentClick(comment) {
     this._changeData(USER_ACTION.deleteComment, UPDATE_TYPE.patch, this._film, comment);
   }
-
 
   _handleAddToWatchlistClick() {
     this._changeData(
@@ -151,7 +145,6 @@ export default class FilmCardPresenter {
     );
 
   }
-
 
   _handleAddToFavoritesClick() {
     this._changeData(

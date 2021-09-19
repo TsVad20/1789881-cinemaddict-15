@@ -10,7 +10,7 @@ const createSortListTemplate = (currentSortType) => (
 </ul>`
 );
 
-export default class SortListView extends AbstractView{
+export default class SortView extends AbstractView{
   constructor(currentSortType) {
     super();
     this._currentSortType = currentSortType;
