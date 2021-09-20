@@ -6,9 +6,10 @@ import FilmsModel from './model/film-cards-model.js';
 import FilterModel from './model/filter-model.js';
 import StatisticsView from './view/stats-view.js';
 import Api from './api.js';
-import FooterView from './view/footer-view.js';
 import MainView from './view/main-view.js';
-import HeaderView from './view/header-view.js';
+import HeaderPresenter from './presenter/header-presenter.js';
+import FooterPresenter from './presenter/footer-presenter.js';
+
 
 const api = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.MOVIES);
 
@@ -20,8 +21,9 @@ const header = document.querySelector('header');
 const footer = document.querySelector('footer');
 
 const mainContainerComponent = new MainView();
-
+const headerPresenter = new HeaderPresenter(header, filmsModel);
 const filmsListPresenter = new FilmsListPresenter(mainContainerComponent, footer, filmsModel, filterModel, api);
+const footerPresenter = new FooterPresenter(footer, filmsModel);
 
 let statisticsComponent = null;
 
@@ -47,18 +49,15 @@ const filterPresenter = new FilterPresenter(mainContainerComponent.getElement(),
 
 render(header, mainContainerComponent, renderPosition.afterEnd); //секция main
 
-
+headerPresenter.init();
+filterPresenter.init();
 filmsListPresenter.init();
+footerPresenter.init();
 
 api.getData()
   .then((films) => {
     filmsModel.setFilms(UPDATE_TYPE.init,films);
-    filterPresenter.init();
-    render(header, new HeaderView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция header
-    render(footer, new FooterView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция footer
   })
   .catch(() =>{
     filmsModel.setFilms(UPDATE_TYPE.init,[]);
-    render(header, new HeaderView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция header
-    render(footer, new FooterView(filmsModel.getFilms()), renderPosition.beforeEnd); //секция footer
   }  );

@@ -26,7 +26,7 @@ const createFilmCardTemplate = (film) =>{
       <span class="film-card__genre">${filmGenres.slice(0,1)}</span>
     </p>
     <img src="${filmPoster}" alt="${filmPoster}" class="film-card__poster">
-    <p class="film-card__description">${filmDescription.slice(0,FILM_DESCRIPTION_MAX_LENGTH - 1)}(...)</p>
+    <p class="film-card__description">${filmDescription.slice(0,FILM_DESCRIPTION_MAX_LENGTH - 1)}...</p>
     <a class="film-card__comments">${filmComments.length} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item ${addedToWatchlistClassName}" type="button">Add to watchlist</button>

@@ -15,6 +15,7 @@ import {filter} from '../utils/filter.js';
 import CommentsModel from '../model/comments-model.js';
 import LoadingView from '../view/loading-view.js';
 
+
 export default class FilmsListPresenter {
   constructor(filmsContainer, popupContainer, filmsModel, filterModel, api) {
     this._filmsModel = filmsModel;
@@ -174,6 +175,10 @@ export default class FilmsListPresenter {
   }
 
   _renderNoFilms() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     this._noFilmComponent = new NoFilmView(this._filterType);
     render(this._filmsListComponent, this._noFilmComponent, renderPosition.beforeEnd); //рендер заглушки
   }

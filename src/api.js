@@ -29,7 +29,7 @@ export default class Api {
 
   updateData(data) {
     return this._load({
-      url: `${this._dataType}/${data.id}`,
+      url: `${this._dataType}/${data.filmId}`,
       method: Method.PUT,
       body: JSON.stringify(FilmsModel.adaptToServer(data)),
       headers: new Headers({'Content-Type': 'application/json'}),
