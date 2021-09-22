@@ -11,7 +11,7 @@ import HeaderPresenter from './presenter/header-presenter.js';
 import FooterPresenter from './presenter/footer-presenter.js';
 
 
-const api = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.MOVIES);
+const moviesApi = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.MOVIES);
 
 const filmsModel = new FilmsModel();
 
@@ -22,7 +22,7 @@ const footer = document.querySelector('footer');
 
 const mainContainerComponent = new MainView();
 const headerPresenter = new HeaderPresenter(header, filmsModel);
-const filmsListPresenter = new FilmsListPresenter(mainContainerComponent, footer, filmsModel, filterModel, api);
+const filmsListPresenter = new FilmsListPresenter(mainContainerComponent, footer, filmsModel, filterModel, moviesApi);
 const footerPresenter = new FooterPresenter(footer, filmsModel);
 
 let statisticsComponent = null;
@@ -54,7 +54,7 @@ filterPresenter.init();
 filmsListPresenter.init();
 footerPresenter.init();
 
-api.getData()
+moviesApi.getData()
   .then((films) => {
     filmsModel.setFilms(UPDATE_TYPE.init,films);
   })

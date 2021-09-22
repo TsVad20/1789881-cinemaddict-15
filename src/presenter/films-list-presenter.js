@@ -17,7 +17,7 @@ import LoadingView from '../view/loading-view.js';
 
 
 export default class FilmsListPresenter {
-  constructor(filmsContainer, popupContainer, filmsModel, filterModel, api) {
+  constructor(filmsContainer, popupContainer, filmsModel, filterModel, moviesApi) {
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
     this._commentsModel = new CommentsModel(this._filmsModel.getFilms());
@@ -35,7 +35,7 @@ export default class FilmsListPresenter {
     this._mostCommentedContainerComponent = new MostCommentedContainerView();
     this._mostCommentedListComponent = new MostCommentedListView;
     this._loadingComponent = new LoadingView();
-    this._api = api;
+    this._moviesApi = moviesApi;
 
     this._filmCardPresenter = new Map();
     this._topRatedCardPresenter = new Map();
@@ -94,7 +94,7 @@ export default class FilmsListPresenter {
   _handleViewAction(actionType, updateType, update, innerUpdate = null) {
     switch (actionType) {
       case USER_ACTION.updateFilm:
-        this._api.updateData(update).then((response) => {
+        this._moviesApi.updateData(update).then((response) => {
           this._filmsModel.updateFilm(updateType, response);
         });
         break;

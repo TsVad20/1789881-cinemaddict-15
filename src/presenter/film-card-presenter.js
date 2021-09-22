@@ -1,7 +1,8 @@
 import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
 import {remove, render, renderPosition, replace  } from '../utils/render.js';
-import {USER_ACTION, UPDATE_TYPE, MODE} from '../consts.js';
+import {USER_ACTION, UPDATE_TYPE, MODE, DATA_TYPE, END_POINT, AUTHORIZATION} from '../consts.js';
+import Api from '../api.js';
 
 export default class FilmCardPresenter {
 
@@ -27,10 +28,17 @@ export default class FilmCardPresenter {
     this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
     this._handleAddCommentClick = this._handleAddCommentClick.bind(this);
 
+    this._commentsApi = new Api(END_POINT, AUTHORIZATION, DATA_TYPE.COMMENTS);
+
   }
 
   init(film) {
     this._film = film;
+    console.log(`${this._film.filmId} ${this._film.filmComments}`);
+    this._commentsApi.getComments(this._film.filmId).then((comments) => {
+      //console.log(comments);
+      comments.forEach((item) => console.log(item.id));
+    });
 
     const prevFilmCardComponent = this._filmCardComponent;
     const prevPopupComponent = this._popupComponent;
