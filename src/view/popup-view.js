@@ -12,25 +12,25 @@ dayjs.extend(relativeTime);
 const createCommentsTemplate = (comments) =>
   comments.map((item) => `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
-    <img src="${item.commentEmoji}" width="55" height="55" alt="${item.commentEmoji}">
+    <img src="./images/emoji/${item.emotion}.png" width="55" height="55" alt="./images/emoji/${item.emotion}.png">
   </span>
   <div>
-    <p class="film-details__comment-text">${(item.commentText)}</p>
+    <p class="film-details__comment-text">${(item.comment)}</p>
     <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${item.commentAuthor}</span>
-      <span class="film-details__comment-day">${dayjs(item.commentDate).fromNow()}</span>
-      <button id = "${item.commentId}"class="film-details__comment-delete">Delete</button>
+      <span class="film-details__comment-author">${item.author}</span>
+      <span class="film-details__comment-day">${dayjs(item.date).fromNow()}</span>
+      <button id = "${item.Id}"class="film-details__comment-delete">Delete</button>
     </p>
   </div>
 </li>`);
 
-const createNewCommentTemplate = (commentEmoji, isEmoji) => (isEmoji) ?
-  `<img src="images/emoji/${commentEmoji}.png" width="55" height="55" alt="emoji-${commentEmoji}">` : '';
+const createNewCommentTemplate = (emotion, isEmotion) => (isEmotion) ?
+  `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">` : '';
 
-const createEmojiesTemplate = (checkedEmoji) => `
+const createEmojiesTemplate = (checkedEmotion) => `
 <div class="film-details__emoji-list">
   ${COMMENT_EMOJIES.map((item) =>
-    `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${item}" value="${item}" ${checkedEmoji === item ? 'checked' : ''}>
+    `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${item}" value="${item}" ${checkedEmotion === item ? 'checked' : ''}>
     <label class="film-details__emoji-label" for="emoji-${item}">
     <img src="./images/emoji/${item}.png" width="30" height="30" alt="${item}">
     </label>`).join('')}
@@ -138,11 +138,11 @@ export const createPopupTemplate = (data) => {
       <ul class="film-details__comments-list">${createCommentsTemplate(filmComments)}</ul>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label">
-        ${createNewCommentTemplate(newComment.emoji, newComment.isEmoji)}</div>
+        ${createNewCommentTemplate(newComment.emotion, newComment.isEmotion)}</div>
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(newComment.commentText)}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(newComment.comment)}</textarea>
         </label>
-        ${createEmojiesTemplate(newComment.emoji)}
+        ${createEmojiesTemplate(newComment.emotion)}
       </div>
     </section>
   </div>
@@ -169,7 +169,7 @@ export default class PopupView extends SmartView {
   static parseFilmToData(film) {
     return Object.assign({}, film, {
       newComment: {
-        commentText:'',
+        comment:'',
       },
     });
   }
@@ -225,7 +225,7 @@ export default class PopupView extends SmartView {
   _deleteClickHandler(evt) {
     evt.preventDefault();
     if (evt.target.matches('button')){
-      const index = this._data.filmComments.findIndex((comment) => comment.commentId === evt.target.id);
+      const index = this._data.filmComments.findIndex((comment) => comment.id === evt.target.id);
       this._callback.deleteClick(this._data.filmComments[index]);
     }
   }
@@ -234,13 +234,13 @@ export default class PopupView extends SmartView {
     evt.preventDefault();
     this._commentDescriptionInputHandler(evt);
     this._emojiToggleHandler(evt);
-    const emoji = `./images/emoji/${this._data.newComment.emoji}.png`;
+    const emotion = `./images/emoji/${this._data.newComment.emotion}.png`;
     const commentToAdd = {
-      commentId: this._data.newComment.commentId,
-      commentEmoji: emoji,
-      commentText: this._data.newComment.commentText,
-      commentAuthor: 'Vadim',
-      commentdate: this._data.newComment.commentdate,
+      id: this._data.newComment.id,
+      emotion: emotion,
+      comment: this._data.newComment.comment,
+      author: 'Vadim',
+      date: this._data.newComment.date,
     };
     this._callback.addComment(commentToAdd);
   }
@@ -253,8 +253,8 @@ export default class PopupView extends SmartView {
     this.updateData({
       newComment: Object.assign({},
         this._data.newComment, {
-          isEmoji: this._data.newComment.emoji !== evt.target.value,
-          emoji: this._data.newComment.emoji === evt.target.value ? '' : evt.target.value,
+          isEmotion: this._data.newComment.emotion !== evt.target.value,
+          emotion: this._data.newComment.emotion === evt.target.value ? '' : evt.target.value,
         },
       ),
     });
@@ -264,10 +264,10 @@ export default class PopupView extends SmartView {
     evt.preventDefault();
     this.updateData({
       newComment: Object.assign({}, this._data.newComment, {
-        commentId: nanoid(),
-        commentText: he.encode(evt.target.value),
-        commentAuthor: 'Vadim',
-        commentdate: dayjs().fromNow(),
+        id: nanoid(),
+        comment: he.encode(evt.target.value),
+        author: 'Vadim',
+        date: dayjs().fromNow(),
       }),
     }, true);
   }

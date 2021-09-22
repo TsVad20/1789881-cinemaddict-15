@@ -34,28 +34,26 @@ export default class FilmCardPresenter {
 
   init(film) {
     this._film = film;
-    console.log(`${this._film.filmId} ${this._film.filmComments}`);
     this._commentsApi.getComments(this._film.filmId).then((comments) => {
-      //console.log(comments);
-      comments.forEach((item) => console.log(item.id));
+      this._film.filmComments = comments;
+      this._popupComponent = new PopupView(film);
+      this._popupComponent.setCloseButtonClickHandler(this._handlePopupCloseButtonClick);
+      this._popupComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
+      this._popupComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
+      this._popupComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
+      this._popupComponent.setDeleteClickHandler(this._handleDeleteCommentClick);
+      this._popupComponent.setAddCommentHandler(this._handleAddCommentClick);
     });
 
     const prevFilmCardComponent = this._filmCardComponent;
     const prevPopupComponent = this._popupComponent;
 
     this._filmCardComponent = new FilmCardView(film);
-    this._popupComponent = new PopupView(film);
 
     this._filmCardComponent.setOpenPopupClickHandler(this._handleFilmCardClick);
     this._filmCardComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
     this._filmCardComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
     this._filmCardComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
-    this._popupComponent.setCloseButtonClickHandler(this._handlePopupCloseButtonClick);
-    this._popupComponent.setAddToWatchlistClickHandler(this._handleAddToWatchlistClick);
-    this._popupComponent.setAddToFavoritesHandler(this._handleAddToFavoritesClick);
-    this._popupComponent.setAlreadyWatchedHandler(this._handleAlreadyWatchedClick);
-    this._popupComponent.setDeleteClickHandler(this._handleDeleteCommentClick);
-    this._popupComponent.setAddCommentHandler(this._handleAddCommentClick);
 
     if (prevFilmCardComponent === null || prevPopupComponent === null) {
       render(this._filmContainer, this._filmCardComponent, renderPosition.beforeEnd);
@@ -100,6 +98,7 @@ export default class FilmCardPresenter {
   }
 
   _showPopup() {
+
     render(this._popupContainer, this._popupComponent, renderPosition.afterEnd);
     document.body.classList.add('hide-overflow');
     document.addEventListener('keydown', this._escKeydownHandler);
