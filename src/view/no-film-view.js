@@ -1,5 +1,5 @@
 import { NO_FILM_TEXT_TYPE } from '../consts.js';
-import AbstractView from './abstract.js';
+import Abstract from './abstract.js';
 
 const createNoFilmTemplate = (filterType) => {
   const noFilmTextValue = NO_FILM_TEXT_TYPE[filterType];
@@ -11,7 +11,7 @@ const createNoFilmTemplate = (filterType) => {
 </section>`;
 };
 
-export default class NoFilmView extends AbstractView {
+export default class NoFilmView extends Abstract {
   constructor(filterType) {
     super();
     this._filterType = filterType;

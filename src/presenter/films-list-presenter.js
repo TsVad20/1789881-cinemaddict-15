@@ -5,7 +5,7 @@ import {remove, render, renderPosition} from '../utils/render.js';
 import {EXTRA_FILM_LIST_CARD_COUNT, FILTER_TYPE, MODE, SHOW_MORE_BUTTON_STEP, SORT_TYPE, UPDATE_TYPE, USER_ACTION} from '../consts.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
-import AllmoviesListView from '../view/all-movies-list-view.js';
+import AllMoviesListView from '../view/all-movies-list-view.js';
 import AllmoviesContainerView from '../view/allmovies-container-view.js';
 import MostCommentedListView from '../view/most-commented-list-view.js';
 import MostCommentedContainerView from '../view/most-commented-container-view.js';
@@ -29,7 +29,7 @@ export default class FilmsListPresenter {
     this._showMoreButtonComponent = null;
     this._renderedFilmCardsCount = SHOW_MORE_BUTTON_STEP;
     this._allMoviesContainerComponent = new AllmoviesContainerView();
-    this._allMoviesListComponent = new AllmoviesListView();
+    this._allMoviesListComponent = new AllMoviesListView();
     this._topRatedContainerComponent = new TopRatedContainerView();
     this._topRatedListComponent = new TopRatedListView();
     this._mostCommentedContainerComponent = new MostCommentedContainerView();
@@ -159,14 +159,14 @@ export default class FilmsListPresenter {
       this._sortComponent = null;
     }
     this._sortComponent = new SortView(this._currentSortType);
-    render(this._filmsListComponent, this._sortComponent, renderPosition.afterBegin); //рендер сортировки
+    render(this._filmsListComponent, this._sortComponent, renderPosition.afterBegin);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderFilmsList() {
     const films = this._getFilms();
     const filmsCount = films.length;
-    render(this._filmsContainer, this._filmsListComponent, renderPosition.beforeEnd); //рендер контейнера под фильмы
+    render(this._filmsContainer, this._filmsListComponent, renderPosition.beforeEnd);
     (filmsCount === 0) ? this._renderNoFilms(): this._renderAllMoviesContainer();
   }
 
@@ -180,11 +180,11 @@ export default class FilmsListPresenter {
       return;
     }
     this._noFilmComponent = new NoFilmView(this._filterType);
-    render(this._filmsListComponent, this._noFilmComponent, renderPosition.beforeEnd); //рендер заглушки
+    render(this._filmsListComponent, this._noFilmComponent, renderPosition.beforeEnd);
   }
 
   _renderAllMoviesContainer() {
-    render(this._filmsListComponent, this._allMoviesContainerComponent, renderPosition.beforeEnd); //рендер Allmovies листа
+    render(this._filmsListComponent, this._allMoviesContainerComponent, renderPosition.beforeEnd);
     this._renderAllMoviesList();
   }
 
@@ -196,11 +196,11 @@ export default class FilmsListPresenter {
     const filmsCount = this._getFilms().length;
     const films = this._getFilms().slice(0, Math.min(filmsCount, SHOW_MORE_BUTTON_STEP));
     this._renderSort();
-    render(this._allMoviesContainerComponent, this._allMoviesListComponent, renderPosition.beforeEnd); //рендер Allmovies контейнера для фильмов
+    render(this._allMoviesContainerComponent, this._allMoviesListComponent, renderPosition.beforeEnd);
 
     if (filmsCount === 0) {
       this._noFilmComponent = new NoFilmView(this._filterType);
-      remove(this._sortComponent);//
+      remove(this._sortComponent);
       render(this._allMoviesContainerComponent, this._noFilmComponent, renderPosition.beforeEnd);
     } else {
       this._renderFilms(this._allMoviesListComponent, films);
@@ -212,7 +212,7 @@ export default class FilmsListPresenter {
   }
 
   _renderTopRatedContainer() {
-    render(this._allMoviesContainerComponent, this._topRatedContainerComponent, renderPosition.afterEnd); //рендер TopRated листа
+    render(this._allMoviesContainerComponent, this._topRatedContainerComponent, renderPosition.afterEnd);
     this._renderTopRatedList();
   }
 
@@ -221,14 +221,14 @@ export default class FilmsListPresenter {
       this._renderLoading();
       return;
     }
-    render(this._topRatedContainerComponent, this._topRatedListComponent, renderPosition.beforeEnd); //рендер TopRated контейнера для фильмов
+    render(this._topRatedContainerComponent, this._topRatedListComponent, renderPosition.beforeEnd);
     const films = this._getFilms();
     this._renderTopRatedFilms(this._topRatedListComponent, films);
 
   }
 
   _renderMostCommentedContainer() {
-    render(this._topRatedContainerComponent, this._mostCommentedContainerComponent, renderPosition.afterEnd); //рендер MostCommented листа
+    render(this._topRatedContainerComponent, this._mostCommentedContainerComponent, renderPosition.afterEnd);
     this._renderMostCommentedList();
   }
 
@@ -237,7 +237,7 @@ export default class FilmsListPresenter {
       this._renderLoading();
       return;
     }
-    render(this._mostCommentedContainerComponent, this._mostCommentedListComponent, renderPosition.beforeEnd); //рендер MostCommented контейнера для фильмов
+    render(this._mostCommentedContainerComponent, this._mostCommentedListComponent, renderPosition.beforeEnd);
     const films = this._getFilms();
     this._renderMostCommentedFilms(this._mostCommentedListComponent, films);
 

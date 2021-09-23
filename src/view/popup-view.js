@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import he from 'he';
 import { COMMENT_EMOJIES } from '../consts.js';
-import SmartView from './smart.js';
+import Smart from './smart.js';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { nanoid } from 'nanoid';
@@ -150,7 +150,7 @@ export const createPopupTemplate = (data) => {
 </section>`;
 };
 
-export default class PopupView extends SmartView {
+export default class PopupView extends Smart {
   constructor(film) {
     super();
     this._data = PopupView.parseFilmToData(film);

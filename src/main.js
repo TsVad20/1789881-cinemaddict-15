@@ -47,7 +47,7 @@ const handleSiteMenuClick = (target) => {
 
 const filterPresenter = new FilterPresenter(mainContainerComponent.getElement(), filterModel, filmsModel, handleSiteMenuClick);
 
-render(header, mainContainerComponent, renderPosition.afterEnd); //секция main
+render(header, mainContainerComponent, renderPosition.afterEnd);
 
 headerPresenter.init();
 filterPresenter.init();

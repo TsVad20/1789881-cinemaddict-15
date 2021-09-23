@@ -1,5 +1,5 @@
 import { FILTER_TYPE } from '../consts.js';
-import AbstractView from './abstract.js';
+import Abstract from './abstract.js';
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;
@@ -22,7 +22,7 @@ const createFilterTemplate = (filterItems, currentFilterType) => {
   );
 };
 
-export default class MenuView extends AbstractView{
+export default class MenuView extends Abstract{
   constructor(filters, currentFilterType) {
     super();
     this._filters = filters;

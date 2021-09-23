@@ -1,5 +1,5 @@
 import {SORT_TYPE} from '../consts.js';
-import AbstractView from './abstract.js';
+import Abstract from './abstract.js';
 
 
 const createSortListTemplate = (currentSortType) => (
@@ -10,7 +10,7 @@ const createSortListTemplate = (currentSortType) => (
 </ul>`
 );
 
-export default class SortView extends AbstractView{
+export default class SortView extends Abstract{
   constructor(currentSortType) {
     super();
     this._currentSortType = currentSortType;

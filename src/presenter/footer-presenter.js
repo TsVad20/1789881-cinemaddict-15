@@ -30,7 +30,7 @@ export default class FooterPresenter {
     }
     const films = this._getFilms();
     this._footerComponent = new FooterView(films);
-    render(this._footerContainer, this._footerComponent, renderPosition.beforeEnd); //секция header
+    render(this._footerContainer, this._footerComponent, renderPosition.beforeEnd);
   }
 
   _handleModelEvent(updateType) {

@@ -30,7 +30,7 @@ export default class HeaderPresenter {
     }
     const films = this._getFilms();
     this._headerComponent = new HeaderView(films);
-    render(this._headerContainer, this._headerComponent, renderPosition.beforeEnd); //секция header
+    render(this._headerContainer, this._headerComponent, renderPosition.beforeEnd);
   }
 
   _handleModelEvent(updateType) {

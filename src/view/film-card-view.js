@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import Abstract from './abstract.js';
 import { FILM_DESCRIPTION_MAX_LENGTH } from '../consts.js';
 import dayjs from 'dayjs';
 
@@ -35,7 +35,7 @@ const createFilmCardTemplate = (film) =>{
     </div>
     </article>`;
 };
-export default class FilmCardView extends AbstractView {
+export default class FilmCardView extends Abstract {
   constructor(film) {
     super();
     this._film = film;

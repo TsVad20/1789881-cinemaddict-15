@@ -22,7 +22,7 @@ export const getRating = (films) => {
   return '';
 };
 
-export const getWatсhedFilmsInRange = (films, dateFrom, dateTo, target) =>
+export const getWatchedFilmsInRange = (films, dateFrom, dateTo, target) =>
   films.reduce((filmsInRange, film) => {
     if (target===STATS_FILTER_TYPE.ALL) {
       filmsInRange.push(film);
